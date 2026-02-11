@@ -3,110 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nuestra Historia ❤️</title>
+<title>Nuestra Historia</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
+
 body {
     margin: 0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to bottom, #ffe6f0, #ffffff);
-    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    background: #0f0f14;
+    color: white;
+    scroll-behavior: smooth;
+}
+
+h1, h2 {
+    font-family: 'Playfair Display', serif;
 }
 
 header {
-    padding: 40px;
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #d63384;
+    height: 100vh;
+    background: url('portada.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+}
+
+header::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+.header-content {
+    position: relative;
+    z-index: 2;
+}
+
+header h1 {
+    font-size: 4em;
+    margin: 0;
+}
+
+header p {
+    font-size: 1.3em;
+    margin-top: 20px;
+    opacity: 0.9;
 }
 
 nav {
-    background: white;
+    position: fixed;
+    width: 100%;
+    background: rgba(15,15,20,0.9);
     padding: 15px;
-    position: sticky;
-    top: 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
 }
 
 nav a {
-    margin: 0 15px;
+    color: white;
     text-decoration: none;
-    color: #d63384;
-    font-weight: bold;
+    margin: 0 20px;
+    font-weight: 300;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #ff4d6d;
 }
 
 section {
-    padding: 50px 20px;
+    padding: 100px 20px;
+    max-width: 1100px;
+    margin: auto;
 }
 
 h2 {
-    color: #d63384;
-    margin-bottom: 30px;
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 2.5em;
 }
 
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-    max-width: 1000px;
-    margin: auto;
 }
 
 .gallery img {
     width: 100%;
     border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    transition: transform 0.3s;
+    transition: 0.4s;
+    cursor: pointer;
 }
 
 .gallery img:hover {
     transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(255,77,109,0.4);
+}
+
+.timeline {
+    border-left: 2px solid #ff4d6d;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    margin-bottom: 40px;
+}
+
+.timeline-item h3 {
+    margin: 0;
+    color: #ff4d6d;
+}
+
+.letter {
+    background: #1c1c24;
+    padding: 40px;
+    border-radius: 20px;
+    line-height: 1.8;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
 footer {
-    padding: 30px;
-    background: #d63384;
-    color: white;
-    margin-top: 40px;
+    text-align: center;
+    padding: 40px;
+    background: #111;
+    font-size: 0.9em;
+    opacity: 0.7;
 }
+
 </style>
 </head>
+
 <body>
 
-<header>
-    Nuestra Historia ❤️
-</header>
-
 <nav>
-    <a href="#viajes">Nuestros Viajes</a>
-    <a href="#momentos">Momentos Especiales</a>
-    <a href="#nosotros">Nosotros</a>
+    <a href="#viajes">Viajes</a>
+    <a href="#momentos">Momentos</a>
+    <a href="#timeline">Nuestra Historia</a>
+    <a href="#carta">Carta</a>
 </nav>
+
+<header>
+    <div class="header-content">
+        <h1>Nuestra Historia</h1>
+        <p>Un pequeño rincón solo para nosotros ❤️</p>
+    </div>
+</header>
 
 <section id="viajes">
     <h2>✈️ Nuestros Viajes</h2>
     <div class="gallery">
-        <img src="foto1.jpg" alt="">
-        <img src="foto2.jpg" alt="">
-        <img src="foto3.jpg" alt="">
+        <img src="viaje1.jpg">
+        <img src="viaje2.jpg">
+        <img src="viaje3.jpg">
     </div>
 </section>
 
 <section id="momentos">
     <h2>✨ Momentos Especiales</h2>
     <div class="gallery">
-        <img src="foto4.jpg" alt="">
-        <img src="foto5.jpg" alt="">
-        <img src="foto6.jpg" alt="">
+        <img src="momento1.jpg">
+        <img src="momento2.jpg">
+        <img src="momento3.jpg">
     </div>
 </section>
 
-<section id="nosotros">
-    <h2>💑 Nosotros</h2>
-    <p>Aquí puedes escribir algo bonito sobre vuestra historia...</p>
+<section id="timeline">
+    <h2>⏳ Nuestra Historia</h2>
+    <div class="timeline">
+        <div class="timeline-item">
+            <h3>El día que nos conocimos</h3>
+            <p>Aquí escribes cómo empezó todo...</p>
+        </div>
+
+        <div class="timeline-item">
+            <h3>Nuestro primer viaje</h3>
+            <p>Cuenta esa historia especial...</p>
+        </div>
+
+        <div class="timeline-item">
+            <h3>Un momento inolvidable</h3>
+            <p>Describe ese recuerdo que nunca olvidaréis.</p>
+        </div>
+    </div>
+</section>
+
+<section id="carta">
+    <h2>💌 Carta para ti</h2>
+    <div class="letter">
+        Aquí puedes escribirle algo bonito, sincero y especial.
+        Algo que cuando lo lea se emocione.
+    </div>
 </section>
 
 <footer>
-    Hecho con ❤️
+    Hecho con amor ❤️
 </footer>
 
 </body>
