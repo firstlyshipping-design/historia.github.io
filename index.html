@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuestra Historia</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -13,12 +16,13 @@ box-sizing:border-box;
 }
 
 body{
-background:#000;
-overflow:hidden;
-font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+background:#0a0a0d;
+font-family:'Playfair Display', serif;
+overflow-x:hidden;
+color:white;
 }
 
-/* SLIDER CONTAINER */
+/* SLIDER FULLSCREEN */
 
 .slider{
 position:relative;
@@ -27,57 +31,98 @@ height:100vh;
 overflow:hidden;
 }
 
-/* SLIDES */
-
-.slides{
-display:flex;
-width:100%;
-height:100%;
-transition:transform 0.8s ease-in-out;
-}
-
 .slide{
-min-width:100%;
+position:absolute;
+width:100%;
 height:100%;
 background-size:cover;
 background-position:center;
+opacity:0;
+transition:opacity 2s ease-in-out, transform 8s ease-in-out;
+transform:scale(1);
 }
 
-/* FADE SHADOW SUTIL */
+.slide.active{
+opacity:1;
+transform:scale(1.08);
+}
+
+/* OVERLAY SUAVE */
 
 .overlay{
 position:absolute;
-bottom:0;
 width:100%;
-height:40%;
-background:linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+height:100%;
+background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
 }
 
-/* INDICADORES */
+/* INTRO TEXTO */
 
-.dots{
+.intro{
 position:absolute;
-bottom:20px;
+bottom:60px;
 width:100%;
 text-align:center;
+font-size:1.4em;
+letter-spacing:4px;
+opacity:0;
+animation:fadeIn 3s ease forwards;
+animation-delay:1s;
 }
 
-.dot{
-display:inline-block;
-width:6px;
-height:6px;
-margin:0 4px;
-background:white;
-opacity:0.3;
-border-radius:50%;
-transition:0.3s;
+@keyframes fadeIn{
+to{opacity:0.8;}
 }
 
-.dot.active{
+/* SECCIÓN CONTENIDO */
+
+.section{
+padding:100px 30px;
+max-width:700px;
+margin:auto;
+text-align:center;
+opacity:0;
+transform:translateY(40px);
+transition:1.2s ease;
+}
+
+.section.visible{
 opacity:1;
+transform:translateY(0);
 }
 
-/* AUDIO OCULTO */
+.section h2{
+font-weight:400;
+font-size:2em;
+margin-bottom:40px;
+}
+
+.section p{
+font-size:1.2em;
+line-height:1.8;
+opacity:0.8;
+}
+
+/* DIVISOR */
+
+.divider{
+width:40px;
+height:1px;
+background:white;
+margin:60px auto;
+opacity:0.3;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:80px 20px;
+font-size:0.9em;
+opacity:0.4;
+}
+
+/* AUDIO */
 
 audio{
 display:none;
@@ -90,73 +135,91 @@ display:none;
 
 <div class="slider">
 
-<div class="slides" id="slides">
-
-<div class="slide" style="background-image:url('viaje1.jpg')"></div>
+<div class="slide active" style="background-image:url('viaje1.jpg')"></div>
 <div class="slide" style="background-image:url('viaje2.jpg')"></div>
 <div class="slide" style="background-image:url('viaje3.jpg')"></div>
 <div class="slide" style="background-image:url('momento1.jpg')"></div>
 <div class="slide" style="background-image:url('momento2.jpg')"></div>
 <div class="slide" style="background-image:url('momento3.jpg')"></div>
 
-</div>
-
 <div class="overlay"></div>
 
-<div class="dots" id="dots"></div>
+<div class="intro">
+NUESTRA HISTORIA
+</div>
 
 </div>
 
-<audio autoplay loop>
+<div class="section">
+<h2>Tiempo</h2>
+<p>
+No sé en qué momento empezó exactamente todo.
+Pero desde que estás, todo tiene más sentido.
+</p>
+<div class="divider"></div>
+</div>
+
+<div class="section">
+<h2>Recuerdos</h2>
+<p>
+Cada viaje.  
+Cada risa.  
+Cada silencio compartido.
+</p>
+<div class="divider"></div>
+</div>
+
+<div class="section">
+<h2>Futuro</h2>
+<p>
+No necesito saber dónde.
+Solo que sea contigo.
+</p>
+</div>
+
+<footer>
+Hecho con calma.  
+Hecho contigo.
+</footer>
+
+<audio id="music" autoplay loop>
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
-const slides = document.getElementById("slides");
-const totalSlides = slides.children.length;
-const dotsContainer = document.getElementById("dots");
+/* SLIDER CINEMÁTICO */
 
-let index = 0;
-let startX = 0;
+let slides=document.querySelectorAll(".slide");
+let index=0;
 
-/* CREAR DOTS */
-for(let i=0;i<totalSlides;i++){
-let dot = document.createElement("span");
-dot.classList.add("dot");
-if(i===0) dot.classList.add("active");
-dotsContainer.appendChild(dot);
+function nextSlide(){
+slides[index].classList.remove("active");
+index=(index+1)%slides.length;
+slides[index].classList.add("active");
 }
 
-const dots = document.querySelectorAll(".dot");
+setInterval(nextSlide,6000);
 
-function updateSlide(){
-slides.style.transform = `translateX(-${index * 100}%)`;
-dots.forEach(dot=>dot.classList.remove("active"));
-dots[index].classList.add("active");
+/* ANIMACIÓN SCROLL */
+
+const sections=document.querySelectorAll(".section");
+
+window.addEventListener("scroll",()=>{
+sections.forEach(sec=>{
+if(sec.getBoundingClientRect().top<window.innerHeight-100){
+sec.classList.add("visible");
 }
-
-/* AUTO SLIDE */
-setInterval(()=>{
-index = (index + 1) % totalSlides;
-updateSlide();
-},5000);
-
-/* SWIPE TOUCH */
-slides.addEventListener("touchstart", e=>{
-startX = e.touches[0].clientX;
+});
 });
 
-slides.addEventListener("touchend", e=>{
-let endX = e.changedTouches[0].clientX;
-if(startX - endX > 50){
-index = (index + 1) % totalSlides;
-}
-if(endX - startX > 50){
-index = (index - 1 + totalSlides) % totalSlides;
-}
-updateSlide();
-});
+/* MÚSICA AUTO + FALLBACK MÓVIL */
+
+const music=document.getElementById("music");
+
+document.body.addEventListener("touchstart",()=>{
+music.play();
+},{once:true});
 
 </script>
 
