@@ -9,132 +9,203 @@
 
 <style>
 
+* { margin:0; padding:0; box-sizing:border-box; }
+
 body {
-    margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: #0f0f14;
-    color: white;
-    scroll-behavior: smooth;
+    background:#0f0f14;
+    color:white;
+    overflow-x:hidden;
 }
 
-h1, h2 {
-    font-family: 'Playfair Display', serif;
+h1,h2,h3 {
+    font-family:'Playfair Display', serif;
 }
 
-header {
-    height: 100vh;
-    background: url('portada.jpg') center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
+/* PASSWORD SCREEN */
+
+#passwordScreen {
+    position:fixed;
+    width:100%;
+    height:100vh;
+    background:#0f0f14;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
 }
 
-header::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
+#passwordScreen input {
+    padding:12px 20px;
+    border:none;
+    border-radius:30px;
+    outline:none;
+    margin-top:20px;
 }
 
-.header-content {
-    position: relative;
-    z-index: 2;
+#passwordScreen button {
+    margin-top:15px;
+    padding:10px 25px;
+    border:none;
+    border-radius:30px;
+    background:#ff4d6d;
+    color:white;
+    cursor:pointer;
 }
 
-header h1 {
-    font-size: 4em;
-    margin: 0;
-}
-
-header p {
-    font-size: 1.3em;
-    margin-top: 20px;
-    opacity: 0.9;
-}
+/* NAV */
 
 nav {
-    position: fixed;
-    width: 100%;
-    background: rgba(15,15,20,0.9);
-    padding: 15px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-    z-index: 1000;
+    position:fixed;
+    width:100%;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(10px);
+    padding:15px;
+    text-align:center;
+    z-index:1000;
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 20px;
-    font-weight: 300;
-    transition: 0.3s;
+    color:white;
+    margin:0 20px;
+    text-decoration:none;
+    transition:0.3s;
 }
 
-nav a:hover {
-    color: #ff4d6d;
+nav a:hover { color:#ff4d6d; }
+
+/* HEADER */
+
+header {
+    height:100vh;
+    background:url('portada.jpg') center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    position:relative;
 }
+
+header::after {
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+}
+
+.header-content {
+    position:relative;
+    z-index:2;
+    animation:fadeIn 2s ease;
+}
+
+header h1 { font-size:4em; }
 
 section {
-    padding: 100px 20px;
-    max-width: 1100px;
-    margin: auto;
+    padding:100px 20px;
+    max-width:1100px;
+    margin:auto;
+    opacity:0;
+    transform:translateY(50px);
+    transition:1s;
+}
+
+section.visible {
+    opacity:1;
+    transform:translateY(0);
 }
 
 h2 {
-    text-align: center;
-    margin-bottom: 60px;
-    font-size: 2.5em;
+    text-align:center;
+    margin-bottom:50px;
+    font-size:2.5em;
 }
 
+/* GALLERY */
+
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
 }
 
 .gallery img {
-    width: 100%;
-    border-radius: 15px;
-    transition: 0.4s;
-    cursor: pointer;
+    width:100%;
+    border-radius:15px;
+    cursor:pointer;
+    transition:0.4s;
 }
 
 .gallery img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(255,77,109,0.4);
+    transform:scale(1.05);
+    box-shadow:0 10px 30px rgba(255,77,109,0.4);
 }
+
+/* LIGHTBOX */
+
+#lightbox {
+    position:fixed;
+    display:none;
+    top:0;
+    left:0;
+    width:100%;
+    height:100vh;
+    background:rgba(0,0,0,0.9);
+    align-items:center;
+    justify-content:center;
+    z-index:2000;
+}
+
+#lightbox img {
+    max-width:90%;
+    max-height:80%;
+}
+
+/* TIMELINE */
 
 .timeline {
-    border-left: 2px solid #ff4d6d;
-    padding-left: 30px;
+    border-left:2px solid #ff4d6d;
+    padding-left:30px;
 }
 
-.timeline-item {
-    margin-bottom: 40px;
-}
+.timeline-item { margin-bottom:40px; }
 
-.timeline-item h3 {
-    margin: 0;
-    color: #ff4d6d;
-}
+.timeline-item h3 { color:#ff4d6d; }
+
+/* LETTER */
 
 .letter {
-    background: #1c1c24;
-    padding: 40px;
-    border-radius: 20px;
-    line-height: 1.8;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    background:#1c1c24;
+    padding:40px;
+    border-radius:20px;
+    line-height:1.8;
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* FLOATING HEARTS */
+
+.heart {
+    position:fixed;
+    color:#ff4d6d;
+    animation:floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+    0% { transform:translateY(100vh); opacity:1; }
+    100% { transform:translateY(-10vh); opacity:0; }
+}
+
+@keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
 }
 
 footer {
-    text-align: center;
-    padding: 40px;
-    background: #111;
-    font-size: 0.9em;
-    opacity: 0.7;
+    text-align:center;
+    padding:40px;
+    opacity:0.6;
 }
 
 </style>
@@ -142,69 +213,113 @@ footer {
 
 <body>
 
+<div id="passwordScreen">
+    <h2>Este rincón es solo para nosotros</h2>
+    <input type="password" id="passwordInput" placeholder="Contraseña">
+    <button onclick="checkPassword()">Entrar</button>
+</div>
+
 <nav>
     <a href="#viajes">Viajes</a>
     <a href="#momentos">Momentos</a>
-    <a href="#timeline">Nuestra Historia</a>
+    <a href="#timeline">Historia</a>
     <a href="#carta">Carta</a>
 </nav>
 
 <header>
     <div class="header-content">
         <h1>Nuestra Historia</h1>
-        <p>Un pequeño rincón solo para nosotros ❤️</p>
+        <p>Un pequeño universo solo nuestro ❤️</p>
     </div>
 </header>
 
 <section id="viajes">
-    <h2>✈️ Nuestros Viajes</h2>
-    <div class="gallery">
-        <img src="viaje1.jpg">
-        <img src="viaje2.jpg">
-        <img src="viaje3.jpg">
-    </div>
+<h2>✈️ Nuestros Viajes</h2>
+<div class="gallery">
+<img src="viaje1.jpg">
+<img src="viaje2.jpg">
+<img src="viaje3.jpg">
+</div>
 </section>
 
 <section id="momentos">
-    <h2>✨ Momentos Especiales</h2>
-    <div class="gallery">
-        <img src="momento1.jpg">
-        <img src="momento2.jpg">
-        <img src="momento3.jpg">
-    </div>
+<h2>✨ Momentos Especiales</h2>
+<div class="gallery">
+<img src="momento1.jpg">
+<img src="momento2.jpg">
+<img src="momento3.jpg">
+</div>
 </section>
 
 <section id="timeline">
-    <h2>⏳ Nuestra Historia</h2>
-    <div class="timeline">
-        <div class="timeline-item">
-            <h3>El día que nos conocimos</h3>
-            <p>Aquí escribes cómo empezó todo...</p>
-        </div>
-
-        <div class="timeline-item">
-            <h3>Nuestro primer viaje</h3>
-            <p>Cuenta esa historia especial...</p>
-        </div>
-
-        <div class="timeline-item">
-            <h3>Un momento inolvidable</h3>
-            <p>Describe ese recuerdo que nunca olvidaréis.</p>
-        </div>
-    </div>
+<h2>⏳ Nuestra Historia</h2>
+<div class="timeline">
+<div class="timeline-item">
+<h3>El día que nos conocimos</h3>
+<p>Escribe aquí cómo empezó todo...</p>
+</div>
+<div class="timeline-item">
+<h3>Nuestro primer viaje</h3>
+<p>Describe ese recuerdo inolvidable...</p>
+</div>
+</div>
 </section>
 
 <section id="carta">
-    <h2>💌 Carta para ti</h2>
-    <div class="letter">
-        Aquí puedes escribirle algo bonito, sincero y especial.
-        Algo que cuando lo lea se emocione.
-    </div>
+<h2>💌 Carta para ti</h2>
+<div class="letter">
+Aquí va el mensaje más bonito que puedas escribir.
+</div>
 </section>
 
-<footer>
-    Hecho con amor ❤️
-</footer>
+<footer>Hecho con amor ❤️</footer>
+
+<div id="lightbox" onclick="this.style.display='none'">
+<img id="lightboxImg">
+</div>
+
+<audio autoplay loop>
+<source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* PASSWORD */
+function checkPassword(){
+    if(document.getElementById("passwordInput").value === "amor"){
+        document.getElementById("passwordScreen").style.display="none";
+    }
+}
+
+/* SCROLL ANIMATION */
+const sections = document.querySelectorAll("section");
+window.addEventListener("scroll", () => {
+    sections.forEach(sec=>{
+        if(sec.getBoundingClientRect().top < window.innerHeight - 100){
+            sec.classList.add("visible");
+        }
+    });
+});
+
+/* LIGHTBOX */
+document.querySelectorAll(".gallery img").forEach(img=>{
+    img.onclick = function(){
+        document.getElementById("lightbox").style.display="flex";
+        document.getElementById("lightboxImg").src=this.src;
+    }
+});
+
+/* FLOATING HEARTS */
+setInterval(()=>{
+    const heart=document.createElement("div");
+    heart.className="heart";
+    heart.style.left=Math.random()*100+"vw";
+    heart.innerHTML="❤";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+},800);
+
+</script>
 
 </body>
 </html>
