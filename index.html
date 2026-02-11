@@ -5,232 +5,180 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuestra Historia</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background:#0f0f14;
-    color:white;
-    overflow-x:hidden;
-}
-
-h1,h2,h3 {
-    font-family:'Playfair Display', serif;
-}
-
-/* PASSWORD SCREEN */
-
-#passwordScreen {
-    position:fixed;
-    width:100%;
-    height:100vh;
-    background:#0f0f14;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
-}
-
-#passwordScreen input {
-    padding:12px 20px;
-    border:none;
-    border-radius:30px;
-    outline:none;
-    margin-top:20px;
-}
-
-#passwordScreen button {
-    margin-top:15px;
-    padding:10px 25px;
-    border:none;
-    border-radius:30px;
-    background:#ff4d6d;
-    color:white;
-    cursor:pointer;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+font-family:'Poppins',sans-serif;
+background:#0b0b12;
+color:white;
+overflow-x:hidden;
 }
 
 /* NAV */
-
-nav {
-    position:fixed;
-    width:100%;
-    background:rgba(0,0,0,0.6);
-    backdrop-filter:blur(10px);
-    padding:15px;
-    text-align:center;
-    z-index:1000;
+nav{
+position:fixed;
+width:100%;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(12px);
+padding:15px;
+text-align:center;
+z-index:1000;
 }
-
-nav a {
-    color:white;
-    margin:0 20px;
-    text-decoration:none;
-    transition:0.3s;
+nav a{
+color:white;
+margin:0 15px;
+text-decoration:none;
+transition:0.3s;
+font-weight:300;
 }
-
-nav a:hover { color:#ff4d6d; }
+nav a:hover{color:#ff4d6d;}
 
 /* HEADER */
+header{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+position:relative;
+}
+header h1{
+font-family:'Playfair Display',serif;
+font-size:4em;
+}
+header p{margin-top:20px;opacity:0.8;}
 
-header {
-    height:100vh;
-    background:url('portada.jpg') center/cover no-repeat;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    position:relative;
+section{
+padding:120px 20px;
+max-width:1100px;
+margin:auto;
+opacity:0;
+transform:translateY(60px);
+transition:1s;
+}
+section.visible{
+opacity:1;
+transform:translateY(0);
 }
 
-header::after {
-    content:"";
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-}
-
-.header-content {
-    position:relative;
-    z-index:2;
-    animation:fadeIn 2s ease;
-}
-
-header h1 { font-size:4em; }
-
-section {
-    padding:100px 20px;
-    max-width:1100px;
-    margin:auto;
-    opacity:0;
-    transform:translateY(50px);
-    transition:1s;
-}
-
-section.visible {
-    opacity:1;
-    transform:translateY(0);
-}
-
-h2 {
-    text-align:center;
-    margin-bottom:50px;
-    font-size:2.5em;
+h2{
+text-align:center;
+margin-bottom:60px;
+font-family:'Playfair Display',serif;
+font-size:2.5em;
 }
 
 /* GALLERY */
-
-.gallery {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
 }
-
-.gallery img {
-    width:100%;
-    border-radius:15px;
-    cursor:pointer;
-    transition:0.4s;
+.gallery img{
+width:100%;
+border-radius:15px;
+cursor:pointer;
+transition:0.4s;
 }
-
-.gallery img:hover {
-    transform:scale(1.05);
-    box-shadow:0 10px 30px rgba(255,77,109,0.4);
+.gallery img:hover{
+transform:scale(1.05);
+box-shadow:0 15px 40px rgba(255,77,109,0.4);
 }
 
 /* LIGHTBOX */
-
-#lightbox {
-    position:fixed;
-    display:none;
-    top:0;
-    left:0;
-    width:100%;
-    height:100vh;
-    background:rgba(0,0,0,0.9);
-    align-items:center;
-    justify-content:center;
-    z-index:2000;
+#lightbox{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+background:rgba(0,0,0,0.9);
+align-items:center;
+justify-content:center;
+z-index:2000;
 }
-
-#lightbox img {
-    max-width:90%;
-    max-height:80%;
+#lightbox img{
+max-width:90%;
+max-height:80%;
+border-radius:20px;
 }
-
-/* TIMELINE */
-
-.timeline {
-    border-left:2px solid #ff4d6d;
-    padding-left:30px;
-}
-
-.timeline-item { margin-bottom:40px; }
-
-.timeline-item h3 { color:#ff4d6d; }
 
 /* LETTER */
-
-.letter {
-    background:#1c1c24;
-    padding:40px;
-    border-radius:20px;
-    line-height:1.8;
-    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+.letter{
+background:#1c1c24;
+padding:50px;
+border-radius:20px;
+line-height:1.8;
+box-shadow:0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* FLOATING HEARTS */
-
-.heart {
-    position:fixed;
-    color:#ff4d6d;
-    animation:floatUp 6s linear infinite;
+/* BUTTON */
+button{
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:#ff4d6d;
+color:white;
+cursor:pointer;
+margin-top:20px;
 }
 
-@keyframes floatUp {
-    0% { transform:translateY(100vh); opacity:1; }
-    100% { transform:translateY(-10vh); opacity:0; }
+/* SECRET */
+#secret{display:none;margin-top:30px;color:#ff4d6d;font-size:1.2em;}
+
+/* MUSIC BUTTON */
+#musicBtn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#ff4d6d;
+width:55px;
+height:55px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-size:20px;
+z-index:1500;
 }
 
-@keyframes fadeIn {
-    from { opacity:0; }
-    to { opacity:1; }
+/* HEARTS */
+.heart{
+position:fixed;
+color:#ff4d6d;
+animation:floatUp 6s linear infinite;
+}
+@keyframes floatUp{
+0%{transform:translateY(100vh);opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
 }
 
-footer {
-    text-align:center;
-    padding:40px;
-    opacity:0.6;
-}
+/* FOOTER */
+footer{text-align:center;padding:40px;opacity:0.6;}
 
 </style>
 </head>
 
 <body>
 
-<div id="passwordScreen">
-    <h2>Este rincón es solo para nosotros</h2>
-    <input type="password" id="passwordInput" placeholder="Contraseña">
-    <button onclick="checkPassword()">Entrar</button>
-</div>
-
 <nav>
-    <a href="#viajes">Viajes</a>
-    <a href="#momentos">Momentos</a>
-    <a href="#timeline">Historia</a>
-    <a href="#carta">Carta</a>
+<a href="#viajes">Viajes</a>
+<a href="#momentos">Momentos</a>
+<a href="#trailer">Tráiler</a>
+<a href="#timeline">Historia</a>
+<a href="#planes">Futuro</a>
+<a href="#carta">Carta</a>
 </nav>
 
 <header>
-    <div class="header-content">
-        <h1>Nuestra Historia</h1>
-        <p>Un pequeño universo solo nuestro ❤️</p>
-    </div>
+<div>
+<h1>Nuestra Historia</h1>
+<p>Un universo solo nuestro ✨</p>
+</div>
 </header>
 
 <section id="viajes">
@@ -243,7 +191,7 @@ footer {
 </section>
 
 <section id="momentos">
-<h2>✨ Momentos Especiales</h2>
+<h2>📸 Momentos Especiales</h2>
 <div class="gallery">
 <img src="momento1.jpg">
 <img src="momento2.jpg">
@@ -251,73 +199,116 @@ footer {
 </div>
 </section>
 
+<section id="trailer">
+<h2>🎬 Nuestro Tráiler</h2>
+<div style="text-align:center;">
+<video width="100%" controls>
+<source src="video.mp4" type="video/mp4">
+</video>
+</div>
+</section>
+
 <section id="timeline">
-<h2>⏳ Nuestra Historia</h2>
-<div class="timeline">
-<div class="timeline-item">
-<h3>El día que nos conocimos</h3>
-<p>Escribe aquí cómo empezó todo...</p>
-</div>
-<div class="timeline-item">
-<h3>Nuestro primer viaje</h3>
-<p>Describe ese recuerdo inolvidable...</p>
-</div>
+<h2>⏳ Tiempo juntos</h2>
+<p style="text-align:center;font-size:1.5em;">
+Llevamos <span id="daysTogether"></span> días ❤️
+</p>
+<h2 style="margin-top:80px;">🗓 Cuenta atrás</h2>
+<p style="text-align:center;font-size:1.5em;" id="countdown"></p>
+</section>
+
+<section id="planes">
+<h2>💍 Nuestros Planes</h2>
+<div class="letter">
+Viajar a ___ <br><br>
+Vivir en ___ <br><br>
+Construir ___ juntos <br><br>
+Seguir eligiéndonos cada día.
 </div>
 </section>
 
 <section id="carta">
 <h2>💌 Carta para ti</h2>
 <div class="letter">
-Aquí va el mensaje más bonito que puedas escribir.
+Aquí escribe algo real, vulnerable y bonito.
+</div>
+<button onclick="showSecret()">Descubre algo más</button>
+<div id="secret">
+Siempre voy a elegirte, incluso en mis peores días.
 </div>
 </section>
 
-<footer>Hecho con amor ❤️</footer>
+<footer>Hecho con amor infinito ❤️</footer>
 
 <div id="lightbox" onclick="this.style.display='none'">
 <img id="lightboxImg">
 </div>
 
-<audio autoplay loop>
+<div id="musicBtn">♫</div>
+
+<audio id="music" loop>
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
-/* PASSWORD */
-function checkPassword(){
-    if(document.getElementById("passwordInput").value === "amor"){
-        document.getElementById("passwordScreen").style.display="none";
-    }
+/* SCROLL */
+const sections=document.querySelectorAll("section");
+window.addEventListener("scroll",()=>{
+sections.forEach(sec=>{
+if(sec.getBoundingClientRect().top<window.innerHeight-100){
+sec.classList.add("visible");
 }
-
-/* SCROLL ANIMATION */
-const sections = document.querySelectorAll("section");
-window.addEventListener("scroll", () => {
-    sections.forEach(sec=>{
-        if(sec.getBoundingClientRect().top < window.innerHeight - 100){
-            sec.classList.add("visible");
-        }
-    });
+});
 });
 
 /* LIGHTBOX */
 document.querySelectorAll(".gallery img").forEach(img=>{
-    img.onclick = function(){
-        document.getElementById("lightbox").style.display="flex";
-        document.getElementById("lightboxImg").src=this.src;
-    }
+img.onclick=function(){
+document.getElementById("lightbox").style.display="flex";
+document.getElementById("lightboxImg").src=this.src;
+}
 });
 
-/* FLOATING HEARTS */
+/* DAYS TOGETHER */
+const startDate=new Date("2023-01-01"); // CAMBIA ESTO
+const today=new Date();
+const diffDays=Math.floor((today-startDate)/(1000*60*60*24));
+document.getElementById("daysTogether").innerText=diffDays;
+
+/* COUNTDOWN */
+const targetDate=new Date("2026-12-31"); // CAMBIA ESTO
+function updateCountdown(){
+const now=new Date();
+const distance=targetDate-now;
+const d=Math.floor(distance/(1000*60*60*24));
+const h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+const m=Math.floor((distance%(1000*60*60))/(1000*60));
+document.getElementById("countdown").innerText=
+d+" días "+h+" horas "+m+" minutos";
+}
+setInterval(updateCountdown,1000);
+
+/* SECRET */
+function showSecret(){
+document.getElementById("secret").style.display="block";
+}
+
+/* MUSIC */
+const music=document.getElementById("music");
+document.getElementById("musicBtn").onclick=function(){
+music.paused?music.play():music.pause();
+}
+
+/* HEARTS */
 setInterval(()=>{
-    const heart=document.createElement("div");
-    heart.className="heart";
-    heart.style.left=Math.random()*100+"vw";
-    heart.innerHTML="❤";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),6000);
-},800);
+const heart=document.createElement("div");
+heart.className="heart";
+heart.style.left=Math.random()*100+"vw";
+heart.innerHTML="❤";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},900);
 
 </script>
 
