@@ -9,20 +9,50 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
 background:#0a0a0d;
 font-family:'Playfair Display', serif;
-overflow-x:hidden;
 color:white;
+overflow-x:hidden;
 }
 
-/* SLIDER FULLSCREEN */
+/* ===== NAVBAR ===== */
+
+nav{
+position:fixed;
+top:0;
+width:100%;
+padding:20px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+z-index:1000;
+}
+
+nav .logo{
+letter-spacing:3px;
+font-size:0.9em;
+opacity:0.8;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-size:0.9em;
+opacity:0.7;
+transition:0.3s;
+}
+
+nav a:hover{
+opacity:1;
+}
+
+/* ===== SLIDER ===== */
 
 .slider{
 position:relative;
@@ -47,8 +77,6 @@ opacity:1;
 transform:scale(1.08);
 }
 
-/* OVERLAY SUAVE */
-
 .overlay{
 position:absolute;
 width:100%;
@@ -56,28 +84,10 @@ height:100%;
 background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
 }
 
-/* INTRO TEXTO */
-
-.intro{
-position:absolute;
-bottom:60px;
-width:100%;
-text-align:center;
-font-size:1.4em;
-letter-spacing:4px;
-opacity:0;
-animation:fadeIn 3s ease forwards;
-animation-delay:1s;
-}
-
-@keyframes fadeIn{
-to{opacity:0.8;}
-}
-
-/* SECCIÓN CONTENIDO */
+/* ===== SECCIONES ===== */
 
 .section{
-padding:100px 30px;
+padding:120px 30px;
 max-width:700px;
 margin:auto;
 text-align:center;
@@ -94,44 +104,38 @@ transform:translateY(0);
 .section h2{
 font-weight:400;
 font-size:2em;
-margin-bottom:40px;
+margin-bottom:30px;
 }
 
 .section p{
-font-size:1.2em;
+font-size:1.1em;
 line-height:1.8;
 opacity:0.8;
 }
 
-/* DIVISOR */
-
-.divider{
-width:40px;
-height:1px;
-background:white;
-margin:60px auto;
-opacity:0.3;
-}
-
-/* FOOTER */
+/* ===== FOOTER ===== */
 
 footer{
 text-align:center;
 padding:80px 20px;
-font-size:0.9em;
+font-size:0.8em;
 opacity:0.4;
 }
 
-/* AUDIO */
-
-audio{
-display:none;
-}
+audio{display:none;}
 
 </style>
 </head>
 
 <body>
+
+<nav>
+<div class="logo">NUESTRA HISTORIA</div>
+<div>
+<a href="index.html">Inicio</a>
+<a href="viajes.html">Nuestros Viajes</a>
+</div>
+</nav>
 
 <div class="slider">
 
@@ -143,42 +147,16 @@ display:none;
 <div class="slide" style="background-image:url('momento3.jpg')"></div>
 
 <div class="overlay"></div>
-
-<div class="intro">
-NUESTRA HISTORIA
-</div>
-
 </div>
 
 <div class="section">
-<h2>Tiempo</h2>
+<h2>Todo empezó sin planearlo</h2>
 <p>
-No sé en qué momento empezó exactamente todo.
-Pero desde que estás, todo tiene más sentido.
-</p>
-<div class="divider"></div>
-</div>
-
-<div class="section">
-<h2>Recuerdos</h2>
-<p>
-Cada viaje.  
-Cada risa.  
-Cada silencio compartido.
-</p>
-<div class="divider"></div>
-</div>
-
-<div class="section">
-<h2>Futuro</h2>
-<p>
-No necesito saber dónde.
-Solo que sea contigo.
+Y terminó siendo lo más bonito que me ha pasado.
 </p>
 </div>
 
 <footer>
-Hecho con calma.  
 Hecho contigo.
 </footer>
 
@@ -187,8 +165,6 @@ Hecho contigo.
 </audio>
 
 <script>
-
-/* SLIDER CINEMÁTICO */
 
 let slides=document.querySelectorAll(".slide");
 let index=0;
@@ -201,10 +177,8 @@ slides[index].classList.add("active");
 
 setInterval(nextSlide,6000);
 
-/* ANIMACIÓN SCROLL */
-
+/* Animación scroll */
 const sections=document.querySelectorAll(".section");
-
 window.addEventListener("scroll",()=>{
 sections.forEach(sec=>{
 if(sec.getBoundingClientRect().top<window.innerHeight-100){
@@ -213,10 +187,8 @@ sec.classList.add("visible");
 });
 });
 
-/* MÚSICA AUTO + FALLBACK MÓVIL */
-
+/* Música fallback móvil */
 const music=document.getElementById("music");
-
 document.body.addEventListener("touchstart",()=>{
 music.play();
 },{once:true});
