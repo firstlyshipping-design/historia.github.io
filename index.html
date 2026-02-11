@@ -5,66 +5,84 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuestra Historia</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-background:#0d0d0f;
-font-family:'Cormorant Garamond', serif;
-overflow:hidden;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-/* SLIDER */
+body{
+background:#000;
+overflow:hidden;
+font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* SLIDER CONTAINER */
 
 .slider{
 position:relative;
 width:100vw;
 height:100vh;
+overflow:hidden;
+}
+
+/* SLIDES */
+
+.slides{
+display:flex;
+width:100%;
+height:100%;
+transition:transform 0.8s ease-in-out;
 }
 
 .slide{
-position:absolute;
-width:100%;
+min-width:100%;
 height:100%;
 background-size:cover;
 background-position:center;
-opacity:0;
-transition:opacity 2s ease-in-out;
 }
 
-.slide.active{
-opacity:1;
-}
-
-/* FADE OVERLAY */
+/* FADE SHADOW SUTIL */
 
 .overlay{
 position:absolute;
+bottom:0;
 width:100%;
-height:100%;
-background:linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+height:40%;
+background:linear-gradient(to top, rgba(0,0,0,0.6), transparent);
 }
 
-/* FADE INTRO */
+/* INDICADORES */
 
-.intro{
+.dots{
 position:absolute;
-bottom:40px;
+bottom:20px;
 width:100%;
 text-align:center;
-color:white;
-font-size:1.4em;
-letter-spacing:2px;
-opacity:0.8;
 }
 
-/* MUSIC CONTROL INVISIBLE */
+.dot{
+display:inline-block;
+width:6px;
+height:6px;
+margin:0 4px;
+background:white;
+opacity:0.3;
+border-radius:50%;
+transition:0.3s;
+}
+
+.dot.active{
+opacity:1;
+}
+
+/* AUDIO OCULTO */
 
 audio{
 display:none;
 }
+
 </style>
 </head>
 
@@ -72,18 +90,20 @@ display:none;
 
 <div class="slider">
 
-<div class="slide active" style="background-image:url('viaje1.jpg')"></div>
+<div class="slides" id="slides">
+
+<div class="slide" style="background-image:url('viaje1.jpg')"></div>
 <div class="slide" style="background-image:url('viaje2.jpg')"></div>
 <div class="slide" style="background-image:url('viaje3.jpg')"></div>
 <div class="slide" style="background-image:url('momento1.jpg')"></div>
 <div class="slide" style="background-image:url('momento2.jpg')"></div>
 <div class="slide" style="background-image:url('momento3.jpg')"></div>
 
+</div>
+
 <div class="overlay"></div>
 
-<div class="intro">
-Nuestra Historia
-</div>
+<div class="dots" id="dots"></div>
 
 </div>
 
@@ -93,16 +113,50 @@ Nuestra Historia
 
 <script>
 
-let slides=document.querySelectorAll(".slide");
-let index=0;
+const slides = document.getElementById("slides");
+const totalSlides = slides.children.length;
+const dotsContainer = document.getElementById("dots");
 
-function nextSlide(){
-slides[index].classList.remove("active");
-index=(index+1)%slides.length;
-slides[index].classList.add("active");
+let index = 0;
+let startX = 0;
+
+/* CREAR DOTS */
+for(let i=0;i<totalSlides;i++){
+let dot = document.createElement("span");
+dot.classList.add("dot");
+if(i===0) dot.classList.add("active");
+dotsContainer.appendChild(dot);
 }
 
-setInterval(nextSlide,5000);
+const dots = document.querySelectorAll(".dot");
+
+function updateSlide(){
+slides.style.transform = `translateX(-${index * 100}%)`;
+dots.forEach(dot=>dot.classList.remove("active"));
+dots[index].classList.add("active");
+}
+
+/* AUTO SLIDE */
+setInterval(()=>{
+index = (index + 1) % totalSlides;
+updateSlide();
+},5000);
+
+/* SWIPE TOUCH */
+slides.addEventListener("touchstart", e=>{
+startX = e.touches[0].clientX;
+});
+
+slides.addEventListener("touchend", e=>{
+let endX = e.changedTouches[0].clientX;
+if(startX - endX > 50){
+index = (index + 1) % totalSlides;
+}
+if(endX - startX > 50){
+index = (index - 1 + totalSlides) % totalSlides;
+}
+updateSlide();
+});
 
 </script>
 
