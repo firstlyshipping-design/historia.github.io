@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuestros Viajes</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -18,7 +18,7 @@ min-height:100vh;
 overflow-x:hidden;
 }
 
-/* CANVAS FONDO */
+/* Fondo animado */
 #bgCanvas{
 position:fixed;
 top:0;
@@ -33,7 +33,7 @@ nav{
 position:fixed;
 top:0;
 width:100%;
-padding:18px 20px;
+padding:18px 30px;
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -43,7 +43,7 @@ z-index:1000;
 }
 
 .logo{
-font-size:0.75rem;
+font-size:0.8rem;
 letter-spacing:3px;
 opacity:0.85;
 }
@@ -51,44 +51,48 @@ opacity:0.85;
 .menu a{
 text-decoration:none;
 color:white;
-margin-left:15px;
+margin-left:20px;
 font-size:0.75rem;
 letter-spacing:2px;
 opacity:0.6;
+transition:0.3s;
 }
+
+.menu a:hover{opacity:1;}
 
 /* CONTENEDOR */
 .container{
 padding-top:120px;
 max-width:1200px;
 margin:auto;
-padding:0 20px;
+padding-left:20px;
+padding-right:20px;
 }
 
-/* TITULO */
 h1{
 text-align:center;
 font-weight:400;
 letter-spacing:4px;
 margin-bottom:50px;
-font-size:1.4rem;
+font-size:1.5rem;
 opacity:0.9;
 }
 
-/* GRID ÁLBUMES */
+/* GRID */
 .album-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:25px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
 }
 
+/* ALBUM */
 .album{
 position:relative;
-height:240px;
-border-radius:20px;
+height:260px;
+border-radius:22px;
 overflow:hidden;
 cursor:pointer;
-transition:0.5s ease;
+transition:0.5s;
 background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.08);
 display:flex;
@@ -97,14 +101,7 @@ padding:20px;
 }
 
 .album:hover{
-transform:translateY(-8px);
-}
-
-.album::before{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0.1));
+transform:translateY(-10px) scale(1.02);
 }
 
 .album img{
@@ -117,58 +114,90 @@ left:0;
 z-index:-1;
 }
 
+.album::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);
+}
+
 .album h3{
 position:relative;
-font-weight:400;
+font-weight:500;
 letter-spacing:2px;
-font-size:0.9rem;
+font-size:1rem;
 }
 
 .photo-count{
 position:absolute;
 top:15px;
-right:15px;
+left:15px;
 font-size:0.7rem;
-opacity:0.7;
+opacity:0.8;
 }
 
-/* BOTON CREAR */
+.delete-album{
+position:absolute;
+top:15px;
+right:15px;
+background:rgba(0,0,0,0.6);
+border:none;
+color:white;
+font-size:12px;
+padding:6px 10px;
+border-radius:10px;
+cursor:pointer;
+opacity:0;
+transition:0.3s;
+}
+
+.album:hover .delete-album{
+opacity:1;
+}
+
+/* BOTONES */
 .create-btn{
-margin:40px auto;
+margin:50px auto;
 display:block;
-padding:10px 25px;
+padding:12px 28px;
 border:1px solid rgba(255,255,255,0.4);
 border-radius:30px;
 background:none;
 color:white;
 letter-spacing:2px;
 cursor:pointer;
+transition:0.3s;
+}
+
+.create-btn:hover{
+background:white;
+color:black;
 }
 
 /* GALERIA */
 .gallery{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:15px;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:18px;
 margin-top:40px;
 }
 
 .photo{
-border-radius:14px;
+border-radius:15px;
 overflow:hidden;
 position:relative;
 }
 
 .photo img{
 width:100%;
-height:100%;
+height:200px;
 object-fit:cover;
-transition:0.6s ease;
 cursor:pointer;
+transition:0.6s;
 }
 
 .photo:hover img{
-transform:scale(1.06);
+transform:scale(1.07);
 }
 
 .delete-btn{
@@ -178,10 +207,10 @@ right:8px;
 background:rgba(0,0,0,0.6);
 border:none;
 color:white;
-font-size:11px;
+font-size:12px;
 padding:5px 8px;
-cursor:pointer;
 border-radius:8px;
+cursor:pointer;
 opacity:0;
 transition:0.3s;
 }
@@ -190,7 +219,6 @@ transition:0.3s;
 opacity:1;
 }
 
-/* TEXTAREA DIARIO */
 textarea{
 width:100%;
 margin-top:25px;
@@ -199,12 +227,10 @@ border:none;
 color:white;
 padding:15px;
 border-radius:15px;
-font-family:'Playfair Display';
 resize:none;
 min-height:100px;
 }
 
-/* BOTON VOLVER */
 .back-btn{
 display:inline-block;
 margin-bottom:20px;
@@ -246,7 +272,7 @@ opacity:0.4;
 <div class="logo">NUESTROS VIAJES</div>
 <div class="menu">
 <a href="index.html">Inicio</a>
-<a href="viajes.html">Nuestros Viajes</a>
+<a href="viajes.html">Viajes</a>
 </div>
 </nav>
 
@@ -284,7 +310,7 @@ Cada viaje empieza contigo.
 
 <script>
 
-/* ===== ALBUMES ===== */
+/* ===== ÁLBUMES ===== */
 
 let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
 "París 2024": {photos:[], note:""},
@@ -324,7 +350,17 @@ div.appendChild(img);
 div.innerHTML+=`
 <div class="photo-count">${data.photos.length} fotos</div>
 <h3>${name}</h3>
+<button class="delete-album">Eliminar</button>
 `;
+
+div.querySelector(".delete-album").onclick=(e)=>{
+e.stopPropagation();
+if(confirm("¿Eliminar este álbum?")){
+delete albums[name];
+saveAlbums();
+renderAlbums();
+}
+};
 
 div.onclick=()=>openAlbum(name);
 albumGrid.appendChild(div);
@@ -334,7 +370,7 @@ renderAlbums();
 
 function createAlbum(){
 const name=prompt("Nombre del nuevo viaje:");
-if(name){
+if(name && !albums[name]){
 albums[name]={photos:[],note:""};
 saveAlbums();
 renderAlbums();
@@ -359,7 +395,7 @@ renderAlbums();
 
 function renderPhotos(){
 gallery.innerHTML="";
-albums[currentAlbum].photos.forEach(src=>{
+albums[currentAlbum].photos.forEach((src,index)=>{
 const div=document.createElement("div");
 div.classList.add("photo");
 
@@ -374,10 +410,11 @@ const btn=document.createElement("button");
 btn.classList.add("delete-btn");
 btn.textContent="✕";
 btn.onclick=()=>{
-albums[currentAlbum].photos=
-albums[currentAlbum].photos.filter(p=>p!==src);
+if(confirm("¿Eliminar esta foto?")){
+albums[currentAlbum].photos.splice(index,1);
 saveAlbums();
 renderPhotos();
+}
 };
 
 div.appendChild(img);
@@ -407,11 +444,10 @@ document.getElementById("lightbox").onclick=function(){
 this.style.display="none";
 };
 
-/* ===== FONDO ROMÁNTICO ===== */
+/* ===== FONDO ANIMADO ===== */
 
 const canvas=document.getElementById("bgCanvas");
 const ctx=canvas.getContext("2d");
-
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
@@ -448,7 +484,7 @@ p.x=Math.random()*canvas.width;
 }
 setInterval(draw,33);
 
-/* ===== MUSICA GLOBAL ===== */
+/* ===== MÚSICA GLOBAL ===== */
 
 let music=document.createElement("audio");
 music.src="musica.mp3";
@@ -458,7 +494,7 @@ document.body.appendChild(music);
 window.addEventListener("load",()=>{
 const savedTime=localStorage.getItem("musicTime");
 if(savedTime) music.currentTime=parseFloat(savedTime);
-music.play();
+music.play().catch(()=>{});
 });
 
 setInterval(()=>{
