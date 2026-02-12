@@ -311,6 +311,29 @@ renderPhotos();
 reader.readAsDataURL(file);
 }
 });
+/* ===== MÚSICA GLOBAL ===== */
+
+let music = parent.document.getElementById("music");
+
+if(!music){
+music = document.createElement("audio");
+music.src = "musica.mp3";
+music.loop = true;
+music.id = "music";
+document.body.appendChild(music);
+}
+
+window.addEventListener("load", () => {
+const savedTime = localStorage.getItem("musicTime");
+if(savedTime){
+music.currentTime = parseFloat(savedTime);
+}
+music.play();
+});
+
+setInterval(() => {
+localStorage.setItem("musicTime", music.currentTime);
+}, 1000);
 
 </script>
 
