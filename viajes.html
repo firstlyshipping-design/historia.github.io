@@ -3,136 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viajes</title>
+<title>Nuestros Viajes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-body{margin:0;font-family:'Playfair Display', serif;background:#111;color:white;padding:20px;}
-h1{text-align:center;margin-bottom:30px;}
-button{padding:8px 12px;margin:5px 0;cursor:pointer;border-radius:6px;border:none;background:#222;color:white;}
-button:hover{background:#555;}
-.album{border:1px solid #333;padding:15px;margin:10px 0;border-radius:8px;background:#1a1a1a;display:flex;justify-content:space-between;align-items:center;}
-.album-title{cursor:pointer;}
-.controls button{margin-left:5px;}
+/* ===== RESET ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Playfair Display', serif;background:linear-gradient(180deg,#0b0b10,#141420);color:white;overflow-x:hidden;padding-top:100px;}
+h1{text-align:center;margin-bottom:40px;letter-spacing:4px;font-weight:400;}
+nav{position:fixed;top:0;width:100%;padding:18px 30px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(12px);z-index:1000;}
+nav .logo{font-size:1rem;letter-spacing:3px;}
+nav .menu a{text-decoration:none;color:white;margin-left:20px;font-size:0.85rem;opacity:0.7;transition:0.3s;}
+nav .menu a:hover{opacity:1;}
+
+/* CONTENEDOR */
+.container{max-width:1200px;margin:auto;padding:0 20px;}
+
+/* ÁLBUMES */
+.album-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;margin-bottom:40px;}
+.album{position:relative;height:220px;border-radius:20px;overflow:hidden;background:rgba(255,255,255,0.05);display:flex;align-items:flex-end;padding:20px;cursor:pointer;transition:0.3s;}
+.album:hover{transform:scale(1.03);}
+.album img{position:absolute;width:100%;height:100%;object-fit:cover;top:0;left:0;z-index:-1;}
+.album::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);}
+.album-title{position:relative;font-weight:500;font-size:1rem;}
+.album-actions{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:2;}
+.action-btn{background:rgba(0,0,0,0.7);border:none;color:white;font-size:11px;padding:5px 8px;border-radius:8px;cursor:pointer;}
+
+/* BOTÓN CREAR */
+.create-btn{display:block;margin:20px auto;padding:10px 25px;border:1px solid rgba(255,255,255,0.4);border-radius:30px;background:none;color:white;cursor:pointer;transition:0.3s;}
+.create-btn:hover{background:white;color:black;}
+
+/* VISTA ÁLBUM */
 #photoView{display:none;}
-.photo{display:inline-block;position:relative;margin:5px;}
-.photo img{width:120px;height:120px;object-fit:cover;border-radius:6px;}
-.delete-photo{position:absolute;top:0;right:0;background:red;color:white;border:none;border-radius:4px;cursor:pointer;}
-textarea{width:100%;margin-top:10px;padding:10px;border-radius:6px;border:none;background:#222;color:white;}
+.back-btn{display:inline-block;margin-bottom:15px;cursor:pointer;}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-top:20px;}
+.photo{position:relative;border-radius:12px;overflow:hidden;}
+.photo img{width:100%;height:160px;object-fit:cover;}
+.delete-btn{position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);border:none;color:white;padding:4px 6px;border-radius:6px;cursor:pointer;}
+textarea{width:100%;margin-top:15px;background:rgba(255,255,255,0.05);border:none;color:white;padding:12px;border-radius:12px;min-height:80px;}
+#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:2000;}
+#lightbox img{max-width:90%;max-height:90%;border-radius:20px;}
+footer{text-align:center;padding:40px 20px;font-size:0.75rem;opacity:0.4;margin-top:50px;}
 </style>
 </head>
 <body>
 
-<h1>Álbumes de Viaje</h1>
-<div id="albumList"></div>
-<button onclick="crearAlbum()">Crear Álbum</button>
+<nav>
+<div class="logo">NUESTROS VIAJES</div>
+<div class="menu">
+<a href="index.html">Inicio</a>
+<a href="viajes.html">Viajes</a>
+</div>
+</nav>
+
+<div class="container">
+<h1 id="pageTitle">Álbumes</h1>
 
 <div id="albumView">
-<hr>
-<button onclick="volver()">← Volver</button>
-<h2 id="albumNombre"></h2>
-<input type="file" id="inputFotos" multiple accept="image/*">
-<div id="fotos"></div>
-<textarea id="nota" placeholder="Escribe algo sobre este viaje..."></textarea>
-<button onclick="guardarNota()">Guardar Nota</button>
+<div class="album-grid" id="albumGrid"></div>
+<button class="create-btn" onclick="createAlbum()">Crear Nuevo Álbum</button>
 </div>
 
+<div id="photoView">
+<span class="back-btn" onclick="goBack()">← Volver a Álbumes</span>
+<h2 id="albumName"></h2>
+
+<label class="create-btn">
+Subir Fotos
+<input type="file" id="photoInput" accept="image/*" multiple hidden>
+</label>
+
+<textarea id="albumNote" placeholder="Escribe algo sobre este viaje..."></textarea>
+
+<div class="gallery" id="gallery"></div>
+</div>
+</div>
+
+<div id="lightbox"><img id="lightboxImg"></div>
+
+<footer>Hecho con amor y viajes ✨</footer>
+
 <script>
-let albums = JSON.parse(localStorage.getItem("albumsViajes")) || {
-"París": { fotos: [], nota: "" },
-"Roma": { fotos: [], nota: "" }
-};
-let albumActual = null;
-
-function guardarDatos(){localStorage.setItem("albumsViajes", JSON.stringify(albums));}
-
-function mostrarAlbums(){
-const cont = document.getElementById("albumList");
-cont.innerHTML="";
-Object.keys(albums).forEach(nombre=>{
-const div = document.createElement("div");
-div.className = "album";
-
-const titulo = document.createElement("span");
-titulo.className = "album-title";
-titulo.textContent = nombre;
-titulo.onclick = () => abrirAlbum(nombre);
-
-const controles = document.createElement("span");
-controles.className="controls";
-
-const editar = document.createElement("button");
-editar.textContent="Editar";
-editar.onclick = (e)=>{ e.stopPropagation();
-let nuevo = prompt("Nuevo nombre:", nombre);
-if(!nuevo || albums[nuevo]) return alert("Nombre ya existe o vacío");
-albums[nuevo]=albums[nombre]; delete albums[nombre]; guardarDatos(); mostrarAlbums();
+let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
+"París 2026": {photos: [], note:""},
+"Japón Soñado": {photos: [], note:""},
+"Roma": {photos: [], note:""}
 };
 
-const eliminar = document.createElement("button");
-eliminar.textContent="Eliminar";
-eliminar.onclick = (e)=>{ e.stopPropagation();
-if(confirm("¿Eliminar álbum?")){delete albums[nombre]; guardarDatos(); mostrarAlbums();}
+let currentAlbum = null;
+const albumGrid = document.getElementById("albumGrid");
+const gallery = document.getElementById("gallery");
+const albumView = document.getElementById("albumView");
+const photoView = document.getElementById("photoView");
+const pageTitle = document.getElementById("pageTitle");
+const noteField = document.getElementById("albumNote");
+
+function saveAlbums(){localStorage.setItem("viajesAlbums", JSON.stringify(albums));}
+
+function renderAlbums(){
+albumGrid.innerHTML="";
+Object.keys(albums).forEach(name=>{
+const div = document.createElement("div"); div.className="album";
+
+if(albums[name].photos[0]){
+const img = document.createElement("img"); img.src = albums[name].photos[0]; div.appendChild(img);
+}
+
+const title = document.createElement("div"); title.className="album-title"; title.textContent = name;
+
+const actions = document.createElement("div"); actions.className="album-actions";
+
+const edit = document.createElement("button"); edit.className="action-btn"; edit.textContent="Editar";
+edit.onclick = (e)=>{e.stopPropagation();
+let newName = prompt("Nuevo nombre:", name); if(!newName || albums[newName]) return;
+albums[newName] = albums[name]; delete albums[name]; saveAlbums(); renderAlbums();
 };
 
-controles.appendChild(editar);
-controles.appendChild(eliminar);
-div.appendChild(titulo);
-div.appendChild(controles);
-cont.appendChild(div);
+const del = document.createElement("button"); del.className="action-btn"; del.textContent="Eliminar";
+del.onclick = (e)=>{e.stopPropagation(); if(confirm("¿Eliminar álbum?")){delete albums[name]; saveAlbums(); renderAlbums();}};
+
+actions.appendChild(edit); actions.appendChild(del); div.appendChild(actions); div.appendChild(title);
+div.onclick=()=>openAlbum(name);
+albumGrid.appendChild(div);
 });
 }
 
-function crearAlbum(){
-let nombre = prompt("Nombre del nuevo álbum:");
-if(!nombre || albums[nombre]) return alert("Nombre inválido o ya existe");
-albums[nombre] = { fotos: [], nota: "" };
-guardarDatos(); mostrarAlbums();
-}
+function createAlbum(){let name=prompt("Nombre del nuevo viaje:"); if(!name || albums[name]) return; albums[name]={photos:[], note:""}; saveAlbums(); renderAlbums();}
 
-function abrirAlbum(nombre){
-albumActual = nombre;
-document.getElementById("albumList").style.display="none";
-document.getElementById("albumView").style.display="block";
-document.getElementById("albumNombre").textContent = nombre;
-document.getElementById("nota").value = albums[nombre].nota;
-mostrarFotos();
-}
+function openAlbum(name){currentAlbum=name; pageTitle.textContent=name; albumView.style.display="none"; photoView.style.display="block"; noteField.value=albums[name].note; renderPhotos();}
 
-function volver(){
-document.getElementById("albumView").style.display="none";
-document.getElementById("albumList").style.display="block";
-albumActual=null;
-mostrarAlbums();
-}
+function goBack(){photoView.style.display="none"; albumView.style.display="block"; pageTitle.textContent="Álbumes"; renderAlbums();}
 
-function mostrarFotos(){
-const cont = document.getElementById("fotos");
-cont.innerHTML="";
-albums[albumActual].fotos.forEach((foto,i)=>{
-const div = document.createElement("div"); div.className="photo";
-const img = document.createElement("img"); img.src=foto;
-const del = document.createElement("button"); del.textContent="X"; del.className="delete-photo";
-del.onclick = ()=>{albums[albumActual].fotos.splice(i,1); guardarDatos(); mostrarFotos();}
-div.appendChild(img); div.appendChild(del);
-cont.appendChild(div);
+function renderPhotos(){
+gallery.innerHTML="";
+albums[currentAlbum].photos.forEach((src,i)=>{
+const div=document.createElement("div"); div.className="photo";
+const img=document.createElement("img"); img.src=src;
+img.onclick=()=>{document.getElementById("lightbox").style.display="flex"; document.getElementById("lightboxImg").src=src;};
+const btn=document.createElement("button"); btn.className="delete-btn"; btn.textContent="✕"; btn.onclick=()=>{albums[currentAlbum].photos.splice(i,1); saveAlbums(); renderPhotos();};
+div.appendChild(img); div.appendChild(btn); gallery.appendChild(div);
 });
 }
 
-document.getElementById("inputFotos").addEventListener("change", function(e){
+document.getElementById("photoInput").addEventListener("change", function(e){
 [...e.target.files].forEach(file=>{
 const reader = new FileReader();
-reader.onload = (ev)=>{albums[albumActual].fotos.push(ev.target.result); guardarDatos(); mostrarFotos();}
+reader.onload=(ev)=>{albums[currentAlbum].photos.push(ev.target.result); saveAlbums(); renderPhotos();};
 reader.readAsDataURL(file);
 });
 this.value="";
 });
 
-function guardarNota(){
-albums[albumActual].nota=document.getElementById("nota").value;
-guardarDatos();
-alert("Nota guardada");
-}
+noteField.addEventListener("input", ()=>{albums[currentAlbum].note=noteField.value; saveAlbums();});
 
-mostrarAlbums();
+document.getElementById("lightbox").onclick=()=>{this.style.display="none";};
+
+renderAlbums();
+
+/* ===== Música ===== */
+const music = new Audio("musica.mp3"); music.loop=true;
+document.body.addEventListener("click", ()=>{if(music.paused) music.play();},{once:true});
 </script>
 
 </body>
