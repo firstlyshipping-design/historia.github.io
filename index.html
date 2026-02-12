@@ -23,7 +23,7 @@ color:white;
 overflow-x:hidden;
 }
 
-/* ===== NAVBAR MÓVIL PERFECTA ===== */
+/* ===== NAVBAR ===== */
 
 nav{
 position:fixed;
@@ -36,6 +36,7 @@ align-items:center;
 background:rgba(0,0,0,0.45);
 backdrop-filter:blur(14px);
 z-index:1000;
+transition:0.4s ease;
 }
 
 .logo{
@@ -58,11 +59,12 @@ transition:0.3s;
 opacity:1;
 }
 
-/* ===== HERO SLIDER FULLSCREEN REAL ===== */
+/* ===== HERO SLIDER ===== */
 
 .slider{
 position:relative;
-height:100svh; /* Soluciona bug iPhone */
+height:100vh;
+height:100svh;
 width:100%;
 overflow:hidden;
 }
@@ -74,50 +76,61 @@ height:100%;
 background-size:cover;
 background-position:center;
 opacity:0;
-transition:opacity 1.5s ease-in-out, transform 6s ease-in-out;
+transition:opacity 1.8s ease-in-out, transform 8s ease-in-out;
 transform:scale(1);
 }
 
 .slide.active{
 opacity:1;
-transform:scale(1.06);
+transform:scale(1.08);
+}
+
+/* Parallax solo en desktop */
+@media (min-width: 768px){
+.slide{
+background-attachment:fixed;
+}
 }
 
 .overlay{
 position:absolute;
 width:100%;
 height:100%;
-background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
+background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.85));
 }
 
-/* ===== TEXTO HERO ===== */
+/* ===== HERO TEXT ===== */
 
 .hero-text{
 position:absolute;
-bottom:80px;
+bottom:90px;
 width:100%;
 text-align:center;
-font-size:0.95rem;
+font-size:1.1rem;
 letter-spacing:4px;
 opacity:0;
-animation:fadeIn 2.5s ease forwards;
+transform:translateY(20px);
+animation:heroFade 2.5s ease forwards;
 animation-delay:1s;
 padding:0 20px;
 }
 
-@keyframes fadeIn{
-to{opacity:0.85;}
+@keyframes heroFade{
+to{
+opacity:0.85;
+transform:translateY(0);
+}
 }
 
-/* ===== SECCIONES MÓVIL ===== */
+/* ===== SECCIONES ===== */
 
 .section{
-padding:70px 22px;
-max-width:500px;
+padding:80px 22px;
+max-width:520px;
 margin:auto;
 text-align:center;
 opacity:0;
-transform:translateY(30px);
+transform:translateY(40px);
 transition:1s ease;
 }
 
@@ -127,15 +140,16 @@ transform:translateY(0);
 }
 
 .section h2{
-font-size:1.5rem;
+font-size:1.6rem;
 font-weight:400;
 margin-bottom:20px;
 letter-spacing:2px;
 }
 
 .section p{
-font-size:0.95rem;
-line-height:1.8;
+font-size:1rem;
+line-height:1.9;
+letter-spacing:0.5px;
 opacity:0.75;
 }
 
@@ -150,9 +164,9 @@ opacity:0.3;
 /* ===== FOOTER ===== */
 
 footer{
-padding:60px 20px;
+padding:70px 20px;
 text-align:center;
-font-size:0.7rem;
+font-size:0.75rem;
 opacity:0.4;
 }
 
@@ -217,13 +231,13 @@ Pero sé que será contigo.
 Hecho con calma. Hecho contigo.
 </footer>
 
-<audio id="music" autoplay loop>
+<audio id="music" loop>
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
-/* ===== SLIDER SUAVE ===== */
+/* ===== SLIDER ===== */
 
 const slides=document.querySelectorAll(".slide");
 let current=0;
@@ -234,9 +248,9 @@ current=(current+1)%slides.length;
 slides[current].classList.add("active");
 }
 
-setInterval(nextSlide,5000);
+setInterval(nextSlide,6500);
 
-/* ===== SCROLL REVEAL OPTIMIZADO ===== */
+/* ===== SCROLL REVEAL ===== */
 
 const sections=document.querySelectorAll(".section");
 
@@ -250,6 +264,16 @@ sec.classList.add("visible");
 
 window.addEventListener("scroll",reveal);
 reveal();
+
+/* ===== NAVBAR OSCURA AL SCROLL ===== */
+
+window.addEventListener("scroll",()=>{
+if(window.scrollY>20){
+document.querySelector("nav").style.background="rgba(0,0,0,0.75)";
+}else{
+document.querySelector("nav").style.background="rgba(0,0,0,0.45)";
+}
+});
 
 /* ===== MÚSICA ===== */
 
