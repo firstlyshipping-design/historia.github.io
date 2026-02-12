@@ -2,301 +2,429 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuestra Historia</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-
-/* ===== RESET ===== */
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-html,body{
-background:#0b0b10;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+background:linear-gradient(180deg,#0b0b10,#141420);
 font-family:'Playfair Display', serif;
 color:white;
 overflow-x:hidden;
 }
 
-/* ===== NAVBAR ===== */
-
+/* NAV */
 nav{
 position:fixed;
 top:0;
 width:100%;
-padding:18px 20px;
+padding:20px 30px;
 display:flex;
 justify-content:space-between;
-align-items:center;
-background:rgba(0,0,0,0.45);
-backdrop-filter:blur(14px);
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(12px);
 z-index:1000;
-transition:0.4s ease;
-}
-
-.logo{
-font-size:0.75rem;
-letter-spacing:3px;
-opacity:0.85;
 }
 
 .menu a{
-text-decoration:none;
 color:white;
-margin-left:15px;
-font-size:0.75rem;
+text-decoration:none;
+margin-left:20px;
 letter-spacing:2px;
-opacity:0.6;
-transition:0.3s;
+font-size:0.8rem;
+cursor:pointer;
+opacity:0.7;
+}
+.menu a:hover{opacity:1;}
+
+section{
+min-height:100vh;
+padding:120px 20px 60px;
+max-width:1200px;
+margin:auto;
+display:none;
+animation:fade 0.6s ease;
 }
 
-.menu a:active{
-opacity:1;
+section.active{display:block;}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
 }
 
-/* ===== HERO SLIDER ===== */
+h1{
+text-align:center;
+margin-bottom:40px;
+letter-spacing:4px;
+font-weight:400;
+}
 
-.slider{
+/* ===== INICIO ===== */
+
+.hero{
+text-align:center;
+margin-top:100px;
+font-size:1.3rem;
+opacity:0.85;
+}
+
+/* ===== VIAJES ===== */
+
+.album-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+}
+
+.album{
 position:relative;
-height:100vh;
-height:100svh;
+height:260px;
+border-radius:20px;
+overflow:hidden;
+background:rgba(255,255,255,0.05);
+display:flex;
+align-items:flex-end;
+padding:20px;
+cursor:pointer;
+}
+
+.album img{
+position:absolute;
 width:100%;
+height:100%;
+object-fit:cover;
+top:0;
+left:0;
+z-index:-1;
+}
+
+.album::after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);
+}
+
+.album-title{
+position:relative;
+}
+
+.album-actions{
+position:absolute;
+top:15px;
+right:15px;
+display:flex;
+gap:8px;
+}
+
+.action-btn{
+background:rgba(0,0,0,0.7);
+border:none;
+color:white;
+font-size:11px;
+padding:6px 10px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.create-btn{
+margin:40px auto;
+display:block;
+padding:12px 28px;
+border:1px solid rgba(255,255,255,0.4);
+border-radius:30px;
+background:none;
+color:white;
+cursor:pointer;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:18px;
+margin-top:40px;
+}
+
+.photo{
+position:relative;
+border-radius:15px;
 overflow:hidden;
 }
 
-.slide{
-position:absolute;
+.photo img{
 width:100%;
-height:100%;
-background-size:cover;
-background-position:center;
-opacity:0;
-transition:opacity 1.8s ease-in-out, transform 8s ease-in-out;
-transform:scale(1);
+height:200px;
+object-fit:cover;
 }
 
-.slide.active{
-opacity:1;
-transform:scale(1.08);
-}
-
-/* Parallax solo en desktop */
-@media (min-width: 768px){
-.slide{
-background-attachment:fixed;
-}
-}
-
-.overlay{
+.delete-btn{
 position:absolute;
-width:100%;
-height:100%;
-background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.85));
+top:8px;
+right:8px;
+background:rgba(0,0,0,0.7);
+border:none;
+color:white;
+padding:5px 8px;
+border-radius:8px;
+cursor:pointer;
 }
 
-/* ===== HERO TEXT ===== */
-
-.hero-text{
-position:absolute;
-bottom:90px;
-width:100%;
-text-align:center;
-font-size:1.1rem;
-letter-spacing:4px;
-opacity:0;
-transform:translateY(20px);
-animation:heroFade 2.5s ease forwards;
-animation-delay:1s;
-padding:0 20px;
-}
-
-@keyframes heroFade{
-to{
-opacity:0.85;
-transform:translateY(0);
-}
-}
-
-/* ===== SECCIONES ===== */
-
-.section{
-padding:80px 22px;
-max-width:520px;
-margin:auto;
-text-align:center;
-opacity:0;
-transform:translateY(40px);
-transition:1s ease;
-}
-
-.section.visible{
-opacity:1;
-transform:translateY(0);
-}
-
-.section h2{
-font-size:1.6rem;
-font-weight:400;
+.back-btn{
 margin-bottom:20px;
-letter-spacing:2px;
+display:inline-block;
+cursor:pointer;
 }
 
-.section p{
-font-size:1rem;
-line-height:1.9;
-letter-spacing:0.5px;
-opacity:0.75;
+textarea{
+width:100%;
+margin-top:20px;
+background:rgba(255,255,255,0.05);
+border:none;
+color:white;
+padding:15px;
+border-radius:15px;
+min-height:100px;
 }
 
-.divider{
-width:30px;
-height:1px;
-background:white;
-margin:40px auto;
-opacity:0.3;
+#lightbox{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:2000;
 }
-
-/* ===== FOOTER ===== */
-
-footer{
-padding:70px 20px;
-text-align:center;
-font-size:0.75rem;
-opacity:0.4;
+#lightbox img{
+max-width:90%;
+max-height:90%;
+border-radius:20px;
 }
-
-/* AUDIO */
-audio{display:none;}
-
 </style>
 </head>
-
 <body>
 
 <nav>
-<div class="logo">NUESTRA HISTORIA</div>
+<div>NUESTRA HISTORIA</div>
 <div class="menu">
-<a href="index.html">Inicio</a>
-<a href="viajes.html">Nuestros Viajes</a>
+<a onclick="showSection('inicio')">Inicio</a>
+<a onclick="showSection('viajes')">Viajes</a>
 </div>
 </nav>
 
-<div class="slider">
+<!-- INICIO -->
+<section id="inicio" class="active">
+<h1>Bienvenida</h1>
+<div class="hero">
+Cada viaje empieza contigo ❤️
+</div>
+</section>
 
-<div class="slide active" style="background-image:url('viaje1.jpg')"></div>
-<div class="slide" style="background-image:url('viaje2.jpg')"></div>
-<div class="slide" style="background-image:url('viaje3.jpg')"></div>
-<div class="slide" style="background-image:url('momento1.jpg')"></div>
-<div class="slide" style="background-image:url('momento2.jpg')"></div>
-<div class="slide" style="background-image:url('momento3.jpg')"></div>
+<!-- VIAJES -->
+<section id="viajes">
+<h1 id="pageTitle">Álbumes</h1>
 
-<div class="overlay"></div>
-
-<div class="hero-text">
-NUESTRA HISTORIA
+<div id="albumView">
+<div class="album-grid" id="albumGrid"></div>
+<button class="create-btn" onclick="createAlbum()">Crear Nuevo Álbum</button>
 </div>
 
-</div>
+<div id="photoView" style="display:none;">
+<span class="back-btn" onclick="goBack()">← Volver</span>
 
-<div class="section">
-<h2>Todo empezó sin planearlo</h2>
-<p>
-Y terminó siendo lo más bonito que me ha pasado.
-</p>
-<div class="divider"></div>
-</div>
+<label class="create-btn">
+Subir Fotos
+<input type="file" id="photoInput" accept="image/*" multiple hidden>
+</label>
 
-<div class="section">
-<h2>Momentos</h2>
-<p>
-Risas. Viajes. Silencios que dicen más que mil palabras.
-Es por eso por lo que este "rinconcito" ha sido creado, para que cuando
-queramos mirar nuestro camino juntos, lo podamos disfrutar en cada momento y
-en cada lugar en el que estemos. Lo iremos actualizando juntos, cada 14 de Febrero,
-donde subiremos todos los momentos los cuales queremos que sean recordados para siempre.
-</p>
-<div class="divider"></div>
-</div>
-<div class="section">
-<h2>Lo que viene</h2>
-<p>
-No sé dónde será.  
-Pero sé que será contigo.
-</p>
-</div>
+<textarea id="albumNote" placeholder="Escribe algo sobre este viaje..."></textarea>
 
-<footer>
-Hecho con calma. Hecho contigo.
-</footer>
+<div class="gallery" id="gallery"></div>
+</div>
+</section>
 
-<audio id="music" loop>
-<source src="musica.mp3" type="audio/mpeg">
-</audio>
+<div id="lightbox"><img id="lightboxImg"></div>
 
 <script>
 
-/* ===== SLIDER ===== */
+/* ===== SPA ===== */
 
-const slides=document.querySelectorAll(".slide");
-let current=0;
-
-function nextSlide(){
-slides[current].classList.remove("active");
-current=(current+1)%slides.length;
-slides[current].classList.add("active");
+function showSection(id){
+document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 }
 
-setInterval(nextSlide,6500);
+/* ===== MÚSICA PERMANENTE ===== */
 
-/* ===== SCROLL REVEAL ===== */
+const music = new Audio("musica.mp3");
+music.loop = true;
+music.volume = 0.7;
 
-const sections=document.querySelectorAll(".section");
-
-function reveal(){
-sections.forEach(sec=>{
-if(sec.getBoundingClientRect().top<window.innerHeight-60){
-sec.classList.add("visible");
-}
-});
-}
-
-window.addEventListener("scroll",reveal);
-reveal();
-
-/* ===== NAVBAR OSCURA AL SCROLL ===== */
-
-window.addEventListener("scroll",()=>{
-if(window.scrollY>20){
-document.querySelector("nav").style.background="rgba(0,0,0,0.75)";
-}else{
-document.querySelector("nav").style.background="rgba(0,0,0,0.45)";
-}
-});
-
-const music = document.getElementById("music");
-
-/* Restaurar tiempo */
-window.addEventListener("load", () => {
-const savedTime = localStorage.getItem("musicTime");
-if(savedTime){
-music.currentTime = parseFloat(savedTime);
-}
-});
-
-/* Guardar tiempo constantemente */
-setInterval(() => {
-localStorage.setItem("musicTime", music.currentTime);
-}, 1000);
-
-/* Activar música en primer toque */
-document.body.addEventListener("touchstart", () => {
+document.addEventListener("click",()=>{
+if(music.paused){
 music.play();
-}, {once:true});
+}
+},{once:true});
+
+/* ===== ÁLBUMES ===== */
+
+let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
+"París 2024": {photos:[], note:""},
+"Italia 2025": {photos:[], note:""}
+};
+
+let currentAlbum=null;
+
+const albumGrid=document.getElementById("albumGrid");
+const gallery=document.getElementById("gallery");
+const albumView=document.getElementById("albumView");
+const photoView=document.getElementById("photoView");
+const pageTitle=document.getElementById("pageTitle");
+const noteField=document.getElementById("albumNote");
+const photoInput=document.getElementById("photoInput");
+
+function saveAlbums(){
+localStorage.setItem("viajesAlbums", JSON.stringify(albums));
+}
+
+function renderAlbums(){
+albumGrid.innerHTML="";
+Object.keys(albums).forEach(name=>{
+
+const div=document.createElement("div");
+div.className="album";
+
+if(albums[name].photos[0]){
+const img=document.createElement("img");
+img.src=albums[name].photos[0];
+div.appendChild(img);
+}
+
+const title=document.createElement("div");
+title.className="album-title";
+title.textContent=name;
+
+const actions=document.createElement("div");
+actions.className="album-actions";
+
+const edit=document.createElement("button");
+edit.className="action-btn";
+edit.textContent="Editar";
+edit.onclick=(e)=>{
+e.stopPropagation();
+let newName=prompt("Nuevo nombre:",name);
+if(!newName || albums[newName]) return;
+albums[newName]=albums[name];
+delete albums[name];
+saveAlbums();
+renderAlbums();
+};
+
+const del=document.createElement("button");
+del.className="action-btn";
+del.textContent="Eliminar";
+del.onclick=(e)=>{
+e.stopPropagation();
+if(confirm("¿Eliminar álbum?")){
+delete albums[name];
+saveAlbums();
+renderAlbums();
+}
+};
+
+actions.appendChild(edit);
+actions.appendChild(del);
+
+div.appendChild(actions);
+div.appendChild(title);
+
+div.onclick=()=>openAlbum(name);
+
+albumGrid.appendChild(div);
+});
+}
+renderAlbums();
+
+function createAlbum(){
+let name=prompt("Nombre del nuevo viaje:");
+if(!name || albums[name]) return;
+albums[name]={photos:[],note:""};
+saveAlbums();
+renderAlbums();
+}
+
+function openAlbum(name){
+currentAlbum=name;
+pageTitle.textContent=name;
+albumView.style.display="none";
+photoView.style.display="block";
+noteField.value=albums[name].note;
+renderPhotos();
+}
+
+function goBack(){
+photoView.style.display="none";
+albumView.style.display="block";
+pageTitle.textContent="Álbumes";
+renderAlbums();
+}
+
+function renderPhotos(){
+gallery.innerHTML="";
+albums[currentAlbum].photos.forEach((src,index)=>{
+const div=document.createElement("div");
+div.className="photo";
+
+const img=document.createElement("img");
+img.src=src;
+img.onclick=()=>{
+document.getElementById("lightbox").style.display="flex";
+document.getElementById("lightboxImg").src=src;
+};
+
+const del=document.createElement("button");
+del.className="delete-btn";
+del.textContent="✕";
+del.onclick=()=>{
+if(confirm("¿Eliminar foto?")){
+albums[currentAlbum].photos.splice(index,1);
+saveAlbums();
+renderPhotos();
+}
+};
+
+div.appendChild(img);
+div.appendChild(del);
+gallery.appendChild(div);
+});
+}
+
+photoInput.addEventListener("change",function(e){
+const files=[...e.target.files];
+files.forEach(file=>{
+const reader=new FileReader();
+reader.onload=function(ev){
+albums[currentAlbum].photos.push(ev.target.result);
+saveAlbums();
+renderPhotos();
+};
+reader.readAsDataURL(file);
+});
+photoInput.value="";
+});
+
+noteField.addEventListener("input",()=>{
+albums[currentAlbum].note=noteField.value;
+saveAlbums();
+});
+
+document.getElementById("lightbox").onclick=function(){
+this.style.display="none";
+};
 
 </script>
 
