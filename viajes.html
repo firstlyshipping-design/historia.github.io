@@ -3,469 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nuestros Viajes</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Viajes</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
-background:linear-gradient(180deg,#0b0b10,#141420);
-font-family:'Playfair Display', serif;
+margin:0;
+font-family:Arial, sans-serif;
+background:#111;
 color:white;
-min-height:100vh;
-overflow-x:hidden;
-}
-
-/* NAV */
-nav{
-position:fixed;
-top:0;
-width:100%;
-padding:18px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(12px);
-z-index:1000;
-}
-
-.logo{
-font-size:0.8rem;
-letter-spacing:3px;
-opacity:0.85;
-}
-
-.menu a{
-text-decoration:none;
-color:white;
-margin-left:20px;
-font-size:0.75rem;
-letter-spacing:2px;
-opacity:0.6;
-}
-
-/* CONTENEDOR */
-.container{
-padding-top:120px;
-max-width:1200px;
-margin:auto;
-padding:0 20px;
+padding:20px;
 }
 
 h1{
 text-align:center;
-font-weight:400;
-letter-spacing:4px;
-margin-bottom:50px;
-font-size:1.5rem;
 }
 
-/* GRID */
-.album-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:30px;
-}
-
-/* ALBUM */
-.album{
-position:relative;
-height:260px;
-border-radius:22px;
-overflow:hidden;
+button{
+padding:8px 12px;
+margin:5px 0;
 cursor:pointer;
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(255,255,255,0.08);
-display:flex;
-align-items:flex-end;
-padding:20px;
-transition:0.4s;
 }
 
-.album:hover{
-transform:translateY(-6px);
-}
-
-.album img{
-position:absolute;
-width:100%;
-height:100%;
-object-fit:cover;
-top:0;
-left:0;
-z-index:-1;
-}
-
-.album::after{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
+.album{
+border:1px solid #333;
+padding:15px;
+margin:10px 0;
+border-radius:8px;
+background:#1a1a1a;
 }
 
 .album-title{
-position:relative;
-font-size:1rem;
-letter-spacing:2px;
-}
-
-.photo-count{
-position:absolute;
-top:15px;
-left:15px;
-font-size:0.7rem;
-}
-
-.album-actions{
-position:absolute;
-top:15px;
-right:15px;
-display:flex;
-gap:8px;
-}
-
-.action-btn{
-background:rgba(0,0,0,0.7);
-border:none;
-color:white;
-font-size:11px;
-padding:6px 10px;
-border-radius:10px;
+font-weight:bold;
 cursor:pointer;
-}
-
-/* BOTONES */
-.create-btn{
-margin:50px auto;
-display:block;
-padding:12px 28px;
-border:1px solid rgba(255,255,255,0.4);
-border-radius:30px;
-background:none;
-color:white;
-cursor:pointer;
-}
-
-/* GALERIA */
-.gallery{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:18px;
-margin-top:40px;
 }
 
 .photo{
+display:inline-block;
+margin:5px;
 position:relative;
-border-radius:15px;
-overflow:hidden;
 }
 
 .photo img{
-width:100%;
-height:200px;
+width:120px;
+height:120px;
 object-fit:cover;
+border-radius:6px;
 }
 
-.delete-btn{
+.delete-photo{
 position:absolute;
-top:8px;
-right:8px;
-background:rgba(0,0,0,0.7);
-border:none;
+top:0;
+right:0;
+background:red;
 color:white;
-font-size:12px;
-padding:5px 8px;
-border-radius:8px;
+border:none;
 cursor:pointer;
+}
+
+.controls button{
+margin-right:5px;
 }
 
 textarea{
 width:100%;
-margin-top:25px;
-background:rgba(255,255,255,0.05);
-border:none;
-color:white;
-padding:15px;
-border-radius:15px;
-min-height:100px;
-}
-
-.back-btn{
-display:inline-block;
-margin-bottom:20px;
-cursor:pointer;
-}
-
-#lightbox{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.9);
-justify-content:center;
-align-items:center;
-z-index:2000;
-}
-#lightbox img{
-max-width:90%;
-max-height:90%;
-border-radius:20px;
+margin-top:10px;
 }
 </style>
 </head>
-
 <body>
 
-<nav>
-<div class="logo">NUESTROS VIAJES</div>
-<div class="menu">
-<a href="index.html">Inicio</a>
-<a href="viajes.html">Viajes</a>
-</div>
-</nav>
+<h1>Álbumes de Viajes</h1>
 
-<div class="container">
+<div id="albumList"></div>
 
-<h1 id="pageTitle">Álbumes</h1>
+<button onclick="crearAlbum()">Crear Álbum</button>
 
-<div id="albumView">
-<div class="album-grid" id="albumGrid"></div>
-<button class="create-btn" id="createAlbumBtn">Crear Nuevo Álbum</button>
-</div>
+<hr>
 
-<div id="photoView" style="display:none;">
-<span class="back-btn" id="backBtn">← Volver</span>
+<div id="albumView" style="display:none;">
+<button onclick="volver()">Volver</button>
+<h2 id="albumNombre"></h2>
 
-<label class="create-btn">
-Subir Fotos
-<input type="file" id="photoInput" accept="image/*" multiple hidden>
-</label>
+<input type="file" id="inputFotos" multiple accept="image/*">
 
-<textarea id="albumNote" placeholder="Escribe algo sobre este viaje..."></textarea>
+<div id="fotos"></div>
 
-<div class="gallery" id="gallery"></div>
-</div>
+<textarea id="nota" placeholder="Escribe algo sobre este viaje..."></textarea>
 
-</div>
-
-<div id="lightbox">
-<img id="lightboxImg">
+<button onclick="guardarNota()">Guardar Nota</button>
 </div>
 
 <script>
 
-/* ===== DATOS ===== */
-
-let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
-"París 2024": {photos:[], note:""},
-"Italia 2025": {photos:[], note:""},
-"Próximo Destino ✨": {photos:[], note:""}
+let albums = JSON.parse(localStorage.getItem("albumsViajes")) || {
+"París": { fotos: [], nota: "" },
+"Roma": { fotos: [], nota: "" }
 };
 
-let currentAlbum = null;
+let albumActual = null;
 
-/* ===== ELEMENTOS ===== */
-
-const albumGrid = document.getElementById("albumGrid");
-const gallery = document.getElementById("gallery");
-const albumView = document.getElementById("albumView");
-const photoView = document.getElementById("photoView");
-const pageTitle = document.getElementById("pageTitle");
-const noteField = document.getElementById("albumNote");
-const photoInput = document.getElementById("photoInput");
-
-/* ===== GUARDAR ===== */
-
-function saveAlbums(){
-localStorage.setItem("viajesAlbums", JSON.stringify(albums));
+function guardarDatos(){
+localStorage.setItem("albumsViajes", JSON.stringify(albums));
 }
 
-/* ===== RENDER ALBUMES ===== */
+function mostrarAlbums(){
+const contenedor = document.getElementById("albumList");
+contenedor.innerHTML = "";
 
-function renderAlbums(){
-albumGrid.innerHTML="";
+for(let nombre in albums){
 
-Object.keys(albums).forEach(name=>{
+const div = document.createElement("div");
+div.className = "album";
 
-const albumDiv = document.createElement("div");
-albumDiv.className="album";
+const titulo = document.createElement("div");
+titulo.className = "album-title";
+titulo.textContent = nombre;
+titulo.onclick = () => abrirAlbum(nombre);
 
-/* Portada */
-if(albums[name].photos.length > 0){
-const img=document.createElement("img");
-img.src=albums[name].photos[0];
-albumDiv.appendChild(img);
+const controles = document.createElement("div");
+controles.className = "controls";
+
+const editar = document.createElement("button");
+editar.textContent = "Editar";
+editar.onclick = () => editarAlbum(nombre);
+
+const eliminar = document.createElement("button");
+eliminar.textContent = "Eliminar";
+eliminar.onclick = () => eliminarAlbum(nombre);
+
+controles.appendChild(editar);
+controles.appendChild(eliminar);
+
+div.appendChild(titulo);
+div.appendChild(controles);
+
+contenedor.appendChild(div);
+}
 }
 
-/* Contador */
-const count=document.createElement("div");
-count.className="photo-count";
-count.textContent=albums[name].photos.length+" fotos";
-albumDiv.appendChild(count);
-
-/* Título */
-const title=document.createElement("div");
-title.className="album-title";
-title.textContent=name;
-albumDiv.appendChild(title);
-
-/* Acciones */
-const actions=document.createElement("div");
-actions.className="album-actions";
-
-/* EDITAR */
-const editBtn=document.createElement("button");
-editBtn.className="action-btn";
-editBtn.textContent="Editar";
-editBtn.onclick=(e)=>{
-e.stopPropagation();
-let newName=prompt("Nuevo nombre:", name);
-if(!newName || newName===name) return;
-
-if(albums[newName]){
+function crearAlbum(){
+let nombre = prompt("Nombre del nuevo álbum:");
+if(!nombre) return;
+if(albums[nombre]){
 alert("Ya existe un álbum con ese nombre");
 return;
 }
-
-albums[newName]=albums[name];
-delete albums[name];
-
-saveAlbums();
-renderAlbums();
-};
-
-/* ELIMINAR */
-const deleteBtn=document.createElement("button");
-deleteBtn.className="action-btn";
-deleteBtn.textContent="Eliminar";
-deleteBtn.onclick=(e)=>{
-e.stopPropagation();
-if(confirm("¿Eliminar álbum completo?")){
-delete albums[name];
-saveAlbums();
-renderAlbums();
+albums[nombre] = { fotos: [], nota: "" };
+guardarDatos();
+mostrarAlbums();
 }
-};
 
-actions.appendChild(editBtn);
-actions.appendChild(deleteBtn);
-albumDiv.appendChild(actions);
+function editarAlbum(nombre){
+let nuevo = prompt("Nuevo nombre:", nombre);
+if(!nuevo) return;
+if(albums[nuevo]){
+alert("Ya existe ese nombre");
+return;
+}
+albums[nuevo] = albums[nombre];
+delete albums[nombre];
+guardarDatos();
+mostrarAlbums();
+}
 
-/* Abrir */
-albumDiv.onclick=()=>openAlbum(name);
+function eliminarAlbum(nombre){
+if(confirm("¿Seguro que quieres eliminar este álbum?")){
+delete albums[nombre];
+guardarDatos();
+mostrarAlbums();
+}
+}
 
-albumGrid.appendChild(albumDiv);
+function abrirAlbum(nombre){
+albumActual = nombre;
+document.getElementById("albumList").style.display = "none";
+document.getElementById("albumView").style.display = "block";
+document.getElementById("albumNombre").textContent = nombre;
+document.getElementById("nota").value = albums[nombre].nota;
+mostrarFotos();
+}
+
+function volver(){
+document.getElementById("albumView").style.display = "none";
+document.getElementById("albumList").style.display = "block";
+albumActual = null;
+mostrarAlbums();
+}
+
+function mostrarFotos(){
+const cont = document.getElementById("fotos");
+cont.innerHTML = "";
+
+albums[albumActual].fotos.forEach((foto, index) => {
+
+const div = document.createElement("div");
+div.className = "photo";
+
+const img = document.createElement("img");
+img.src = foto;
+
+const btn = document.createElement("button");
+btn.textContent = "X";
+btn.className = "delete-photo";
+btn.onclick = () => borrarFoto(index);
+
+div.appendChild(img);
+div.appendChild(btn);
+
+cont.appendChild(div);
 
 });
 }
 
-renderAlbums();
-
-/* ===== CREAR ===== */
-
-document.getElementById("createAlbumBtn").onclick=()=>{
-let name=prompt("Nombre del nuevo viaje:");
-if(!name) return;
-if(albums[name]){
-alert("Ya existe un álbum con ese nombre");
-return;
-}
-albums[name]={photos:[],note:""};
-saveAlbums();
-renderAlbums();
-};
-
-/* ===== ABRIR ===== */
-
-function openAlbum(name){
-currentAlbum=name;
-pageTitle.textContent=name;
-albumView.style.display="none";
-photoView.style.display="block";
-noteField.value=albums[name].note;
-renderPhotos();
+function borrarFoto(index){
+albums[albumActual].fotos.splice(index,1);
+guardarDatos();
+mostrarFotos();
 }
 
-/* ===== VOLVER ===== */
+document.getElementById("inputFotos").addEventListener("change", function(e){
 
-document.getElementById("backBtn").onclick=()=>{
-photoView.style.display="none";
-albumView.style.display="block";
-pageTitle.textContent="Álbumes";
-renderAlbums();
-};
+const files = e.target.files;
 
-/* ===== RENDER FOTOS ===== */
-
-function renderPhotos(){
-gallery.innerHTML="";
-
-albums[currentAlbum].photos.forEach((src,index)=>{
-
-const photoDiv=document.createElement("div");
-photoDiv.className="photo";
-
-const img=document.createElement("img");
-img.src=src;
-img.onclick=()=>{
-document.getElementById("lightbox").style.display="flex";
-document.getElementById("lightboxImg").src=src;
-};
-
-const del=document.createElement("button");
-del.className="delete-btn";
-del.textContent="✕";
-del.onclick=()=>{
-if(confirm("¿Eliminar esta foto?")){
-albums[currentAlbum].photos.splice(index,1);
-saveAlbums();
-renderPhotos();
-}
-};
-
-photoDiv.appendChild(img);
-photoDiv.appendChild(del);
-gallery.appendChild(photoDiv);
-
-});
-}
-
-/* ===== SUBIR FOTOS (ARREGLADO PARA IPHONE) ===== */
-
-photoInput.addEventListener("change", function(e){
-
-const files = Array.from(e.target.files);
-if(!files.length) return;
-
-files.forEach(file=>{
+for(let i=0;i<files.length;i++){
 const reader = new FileReader();
 reader.onload = function(event){
-albums[currentAlbum].photos.push(event.target.result);
-saveAlbums();
-renderPhotos();
+albums[albumActual].fotos.push(event.target.result);
+guardarDatos();
+mostrarFotos();
 };
-reader.readAsDataURL(file);
+reader.readAsDataURL(files[i]);
+}
+
+this.value = "";
 });
 
-/* RESET INPUT (CLAVE PARA IPHONE) */
-photoInput.value="";
+function guardarNota(){
+albums[albumActual].nota = document.getElementById("nota").value;
+guardarDatos();
+alert("Nota guardada");
+}
 
-});
-
-/* ===== NOTA ===== */
-
-noteField.addEventListener("input",()=>{
-albums[currentAlbum].note=noteField.value;
-saveAlbums();
-});
-
-/* ===== LIGHTBOX ===== */
-
-document.getElementById("lightbox").onclick=function(){
-this.style.display="none";
-};
+mostrarAlbums();
 
 </script>
 
