@@ -8,18 +8,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-background:#0b0b10;
+background:linear-gradient(180deg,#0b0b10,#141420);
 font-family:'Playfair Display', serif;
 color:white;
 min-height:100vh;
+overflow-x:hidden;
+}
+
+/* CANVAS FONDO */
+#bgCanvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
 }
 
 /* NAV */
-
 nav{
 position:fixed;
 top:0;
@@ -48,56 +57,82 @@ letter-spacing:2px;
 opacity:0.6;
 }
 
-/* MAIN */
-
+/* CONTENEDOR */
 .container{
-padding-top:110px;
-max-width:1100px;
+padding-top:120px;
+max-width:1200px;
 margin:auto;
-padding-left:20px;
-padding-right:20px;
+padding:0 20px;
 }
 
 /* TITULO */
-
 h1{
 text-align:center;
 font-weight:400;
-letter-spacing:3px;
-margin-bottom:40px;
+letter-spacing:4px;
+margin-bottom:50px;
+font-size:1.4rem;
+opacity:0.9;
 }
 
-/* ALBUM GRID */
-
+/* GRID ÁLBUMES */
 .album-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:18px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:25px;
 }
 
 .album{
+position:relative;
+height:240px;
+border-radius:20px;
+overflow:hidden;
+cursor:pointer;
+transition:0.5s ease;
 background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.08);
-padding:30px 15px;
-border-radius:18px;
-text-align:center;
-cursor:pointer;
-transition:0.3s ease;
+display:flex;
+align-items:flex-end;
+padding:20px;
 }
 
 .album:hover{
-background:rgba(255,255,255,0.1);
-transform:translateY(-4px);
+transform:translateY(-8px);
+}
+
+.album::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0.1));
+}
+
+.album img{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+top:0;
+left:0;
+z-index:-1;
 }
 
 .album h3{
+position:relative;
 font-weight:400;
 letter-spacing:2px;
 font-size:0.9rem;
 }
 
-/* BOTON CREAR */
+.photo-count{
+position:absolute;
+top:15px;
+right:15px;
+font-size:0.7rem;
+opacity:0.7;
+}
 
+/* BOTON CREAR */
 .create-btn{
 margin:40px auto;
 display:block;
@@ -110,61 +145,88 @@ letter-spacing:2px;
 cursor:pointer;
 }
 
-/* GALLERY */
-
+/* GALERIA */
 .gallery{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-gap:12px;
-margin-top:30px;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
+margin-top:40px;
 }
 
 .photo{
-position:relative;
+border-radius:14px;
 overflow:hidden;
-border-radius:12px;
+position:relative;
 }
 
 .photo img{
 width:100%;
 height:100%;
 object-fit:cover;
-display:block;
+transition:0.6s ease;
+cursor:pointer;
+}
+
+.photo:hover img{
+transform:scale(1.06);
 }
 
 .delete-btn{
 position:absolute;
-top:6px;
-right:6px;
+top:8px;
+right:8px;
 background:rgba(0,0,0,0.6);
 border:none;
 color:white;
 font-size:11px;
-padding:4px 7px;
+padding:5px 8px;
 cursor:pointer;
-border-radius:6px;
+border-radius:8px;
+opacity:0;
+transition:0.3s;
+}
+
+.photo:hover .delete-btn{
+opacity:1;
+}
+
+/* TEXTAREA DIARIO */
+textarea{
+width:100%;
+margin-top:25px;
+background:rgba(255,255,255,0.05);
+border:none;
+color:white;
+padding:15px;
+border-radius:15px;
+font-family:'Playfair Display';
+resize:none;
+min-height:100px;
 }
 
 /* BOTON VOLVER */
-
 .back-btn{
-margin-top:30px;
 display:inline-block;
+margin-bottom:20px;
 cursor:pointer;
 opacity:0.6;
 }
 
-input[type="file"]{display:none;}
+/* LIGHTBOX */
+#lightbox{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
 
-.upload-label{
-display:inline-block;
-margin-top:20px;
-padding:10px 20px;
-border:1px solid rgba(255,255,255,0.4);
-border-radius:30px;
-cursor:pointer;
-font-size:0.75rem;
-letter-spacing:2px;
+#lightbox img{
+max-width:90%;
+max-height:90%;
+border-radius:20px;
 }
 
 footer{
@@ -173,11 +235,12 @@ padding:60px 20px;
 font-size:0.7rem;
 opacity:0.4;
 }
-
 </style>
 </head>
 
 <body>
+
+<canvas id="bgCanvas"></canvas>
 
 <nav>
 <div class="logo">NUESTROS VIAJES</div>
@@ -198,14 +261,20 @@ opacity:0.4;
 <div id="photoView" style="display:none;">
 <span class="back-btn" onclick="goBack()">← Volver</span>
 
-<label class="upload-label">
+<label class="create-btn">
 Subir Fotos
-<input type="file" id="photoInput" accept="image/*" multiple>
+<input type="file" id="photoInput" accept="image/*" multiple hidden>
 </label>
+
+<textarea id="albumNote" placeholder="Escribe algo sobre este viaje..."></textarea>
 
 <div class="gallery" id="gallery"></div>
 </div>
 
+</div>
+
+<div id="lightbox">
+<img id="lightboxImg">
 </div>
 
 <footer>
@@ -214,10 +283,12 @@ Cada viaje empieza contigo.
 
 <script>
 
+/* ===== ALBUMES ===== */
+
 let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
-"París 2024": [],
-"Italia 2025": [],
-"Próximo Destino ✨": []
+"París 2024": {photos:[], note:""},
+"Italia 2025": {photos:[], note:""},
+"Próximo Destino ✨": {photos:[], note:""}
 };
 
 let currentAlbum = null;
@@ -227,67 +298,83 @@ const gallery = document.getElementById("gallery");
 const albumView = document.getElementById("albumView");
 const photoView = document.getElementById("photoView");
 const pageTitle = document.getElementById("pageTitle");
+const noteField = document.getElementById("albumNote");
 
-/* Guardar */
 function saveAlbums(){
 localStorage.setItem("viajesAlbums", JSON.stringify(albums));
 }
 
-/* Mostrar álbumes */
 function renderAlbums(){
 albumGrid.innerHTML="";
 for(let name in albums){
+
 const div=document.createElement("div");
 div.classList.add("album");
-div.innerHTML=`<h3>${name}</h3>`;
+
+const data=albums[name];
+const cover=data.photos[0];
+
+if(cover){
+const img=document.createElement("img");
+img.src=cover;
+div.appendChild(img);
+}
+
+div.innerHTML+=`
+<div class="photo-count">${data.photos.length} fotos</div>
+<h3>${name}</h3>
+`;
+
 div.onclick=()=>openAlbum(name);
 albumGrid.appendChild(div);
 }
 }
-
 renderAlbums();
 
-/* Crear álbum */
 function createAlbum(){
 const name=prompt("Nombre del nuevo viaje:");
 if(name){
-albums[name]=[];
+albums[name]={photos:[],note:""};
 saveAlbums();
 renderAlbums();
 }
 }
 
-/* Abrir álbum */
 function openAlbum(name){
 currentAlbum=name;
 pageTitle.textContent=name;
 albumView.style.display="none";
 photoView.style.display="block";
+noteField.value=albums[name].note || "";
 renderPhotos();
 }
 
-/* Volver */
 function goBack(){
 photoView.style.display="none";
 albumView.style.display="block";
 pageTitle.textContent="Álbumes";
+renderAlbums();
 }
 
-/* Mostrar fotos */
 function renderPhotos(){
 gallery.innerHTML="";
-albums[currentAlbum].forEach(src=>{
+albums[currentAlbum].photos.forEach(src=>{
 const div=document.createElement("div");
 div.classList.add("photo");
 
 const img=document.createElement("img");
 img.src=src;
+img.onclick=()=>{
+document.getElementById("lightbox").style.display="flex";
+document.getElementById("lightboxImg").src=src;
+};
 
 const btn=document.createElement("button");
 btn.classList.add("delete-btn");
 btn.textContent="✕";
 btn.onclick=()=>{
-albums[currentAlbum]=albums[currentAlbum].filter(p=>p!==src);
+albums[currentAlbum].photos=
+albums[currentAlbum].photos.filter(p=>p!==src);
 saveAlbums();
 renderPhotos();
 };
@@ -298,42 +385,84 @@ gallery.appendChild(div);
 });
 }
 
-/* Subir fotos */
 document.getElementById("photoInput").addEventListener("change",function(e){
-const files=e.target.files;
-for(let file of files){
+for(let file of e.target.files){
 const reader=new FileReader();
 reader.onload=function(event){
-albums[currentAlbum].push(event.target.result);
+albums[currentAlbum].photos.push(event.target.result);
 saveAlbums();
 renderPhotos();
 };
 reader.readAsDataURL(file);
 }
 });
-/* ===== MÚSICA GLOBAL ===== */
 
-let music = parent.document.getElementById("music");
+noteField.addEventListener("input",()=>{
+albums[currentAlbum].note=noteField.value;
+saveAlbums();
+});
 
-if(!music){
-music = document.createElement("audio");
-music.src = "musica.mp3";
-music.loop = true;
-music.id = "music";
+document.getElementById("lightbox").onclick=function(){
+this.style.display="none";
+};
+
+/* ===== FONDO ROMÁNTICO ===== */
+
+const canvas=document.getElementById("bgCanvas");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<40;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+d:Math.random()*0.5
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="rgba(255,255,255,0.05)";
+ctx.beginPath();
+particles.forEach(p=>{
+ctx.moveTo(p.x,p.y);
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+});
+ctx.fill();
+update();
+}
+
+function update(){
+particles.forEach(p=>{
+p.y+=p.d;
+if(p.y>canvas.height){
+p.y=0;
+p.x=Math.random()*canvas.width;
+}
+});
+}
+setInterval(draw,33);
+
+/* ===== MUSICA GLOBAL ===== */
+
+let music=document.createElement("audio");
+music.src="musica.mp3";
+music.loop=true;
 document.body.appendChild(music);
-}
 
-window.addEventListener("load", () => {
-const savedTime = localStorage.getItem("musicTime");
-if(savedTime){
-music.currentTime = parseFloat(savedTime);
-}
+window.addEventListener("load",()=>{
+const savedTime=localStorage.getItem("musicTime");
+if(savedTime) music.currentTime=parseFloat(savedTime);
 music.play();
 });
 
-setInterval(() => {
-localStorage.setItem("musicTime", music.currentTime);
-}, 1000);
+setInterval(()=>{
+localStorage.setItem("musicTime",music.currentTime);
+},1000);
 
 </script>
 
