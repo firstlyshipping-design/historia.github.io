@@ -1,1 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nuestros Viajes</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#0b0b10;
+font-family:'Playfair Display', serif;
+color:white;
+min-height:100vh;
+}
+
+/* NAV */
+
+nav{
+position:fixed;
+top:0;
+width:100%;
+padding:18px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(12px);
+z-index:1000;
+}
+
+.logo{
+font-size:0.75rem;
+letter-spacing:3px;
+opacity:0.85;
+}
+
+.menu a{
+text-decoration:none;
+color:white;
+margin-left:15px;
+font-size:0.75rem;
+letter-spacing:2px;
+opacity:0.6;
+transition:0.3s;
+}
+
+.menu a:hover{
+opacity:1;
+}
+
+/* HERO */
+
+.hero{
+padding-top:110px;
+text-align:center;
+padding-bottom:40px;
+}
+
+.hero h1{
+font-weight:400;
+letter-spacing:3px;
+margin-bottom:15px;
+}
+
+.hero p{
+opacity:0.6;
+font-size:0.9rem;
+}
+
+/* UPLOAD BUTTON */
+
+.upload-container{
+text-align:center;
+margin:30px 0;
+}
+
+.upload-label{
+display:inline-block;
+padding:12px 25px;
+border:1px solid rgba(255,255,255,0.4);
+border-radius:30px;
+cursor:pointer;
+font-size:0.8rem;
+letter-spacing:2px;
+transition:0.3s;
+}
+
+.upload-label:hover{
+background:white;
+color:black;
+}
+
+input[type="file"]{
+display:none;
+}
+
+/* GALLERY */
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:12px;
+padding:20px;
+max-width:1100px;
+margin:auto;
+}
+
+.photo{
+position:relative;
+overflow:hidden;
+border-radius:12px;
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+transition:transform 0.6s ease;
+}
+
+.photo:hover img{
+transform:scale(1.05);
+}
+
+.delete-btn{
+position:absolute;
+top:8px;
+right:8px;
+background:rgba(0,0,0,0.6);
+border:none;
+color:white;
+font-size:12px;
+padding:4px 8px;
+cursor:pointer;
+border-radius:8px;
+opacity:0;
+transition:0.3s;
+}
+
+.photo:hover .delete-btn{
+opacity:1;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:50px 20px;
+font-size:0.7rem;
+opacity:0.4;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+<div class="logo">NUESTROS VIAJES</div>
+<div class="menu">
+<a href="index.html">Inicio</a>
+</div>
+</nav>
+
+<div class="hero">
+<h1>Álbum de Aventuras</h1>
+<p>Aquí guardaremos cada lugar que descubramos juntos.</p>
+</div>
+
+<div class="upload-container">
+<label class="upload-label">
+Subir Recuerdo
+<input type="file" id="photoInput" accept="image/*" multiple>
+</label>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<footer>
+Cada viaje empieza contigo.
+</footer>
+
+<script>
+
+const input = document.getElementById("photoInput");
+const gallery = document.getElementById("gallery");
+
+/* Cargar fotos guardadas */
+window.addEventListener("load", () => {
+const savedPhotos = JSON.parse(localStorage.getItem("viajesPhotos")) || [];
+savedPhotos.forEach(src => addPhotoToGallery(src));
+});
+
+/* Subir nuevas fotos */
+input.addEventListener("change", (event) => {
+const files = event.target.files;
+
+for (let file of files) {
+const reader = new FileReader();
+reader.onload = function(e) {
+const imageSrc = e.target.result;
+addPhotoToGallery(imageSrc);
+savePhoto(imageSrc);
+};
+reader.readAsDataURL(file);
+}
+
+});
+
+/* Añadir foto */
+function addPhotoToGallery(src) {
+const div = document.createElement("div");
+div.classList.add("photo");
+
+const img = document.createElement("img");
+img.src = src;
+
+const btn = document.createElement("button");
+btn.classList.add("delete-btn");
+btn.textContent = "✕";
+
+btn.addEventListener("click", () => {
+div.remove();
+removePhoto(src);
+});
+
+div.appendChild(img);
+div.appendChild(btn);
+gallery.appendChild(div);
+}
+
+/* Guardar en localStorage */
+function savePhoto(src) {
+let photos = JSON.parse(localStorage.getItem("viajesPhotos")) || [];
+photos.push(src);
+localStorage.setItem("viajesPhotos", JSON.stringify(photos));
+}
+
+/* Eliminar */
+function removePhoto(src) {
+let photos = JSON.parse(localStorage.getItem("viajesPhotos")) || [];
+photos = photos.filter(photo => photo !== src);
+localStorage.setItem("viajesPhotos", JSON.stringify(photos));
+}
+
+</script>
+
+</body>
+</html>
