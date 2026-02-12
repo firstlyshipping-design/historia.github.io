@@ -18,7 +18,7 @@ min-height:100vh;
 overflow-x:hidden;
 }
 
-/* Fondo animado */
+/* Fondo */
 #bgCanvas{
 position:fixed;
 top:0;
@@ -57,7 +57,6 @@ letter-spacing:2px;
 opacity:0.6;
 transition:0.3s;
 }
-
 .menu a:hover{opacity:1;}
 
 /* CONTENEDOR */
@@ -65,8 +64,7 @@ transition:0.3s;
 padding-top:120px;
 max-width:1200px;
 margin:auto;
-padding-left:20px;
-padding-right:20px;
+padding:0 20px;
 }
 
 h1{
@@ -101,7 +99,7 @@ padding:20px;
 }
 
 .album:hover{
-transform:translateY(-10px) scale(1.02);
+transform:translateY(-8px) scale(1.02);
 }
 
 .album img{
@@ -118,14 +116,13 @@ z-index:-1;
 content:"";
 position:absolute;
 inset:0;
-background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);
+background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
 }
 
-.album h3{
+.album-title{
 position:relative;
-font-weight:500;
-letter-spacing:2px;
 font-size:1rem;
+letter-spacing:2px;
 }
 
 .photo-count{
@@ -136,10 +133,22 @@ font-size:0.7rem;
 opacity:0.8;
 }
 
-.delete-album{
+/* Botones álbum */
+.album-actions{
 position:absolute;
 top:15px;
 right:15px;
+display:flex;
+gap:8px;
+opacity:0;
+transition:0.3s;
+}
+
+.album:hover .album-actions{
+opacity:1;
+}
+
+.action-btn{
 background:rgba(0,0,0,0.6);
 border:none;
 color:white;
@@ -147,15 +156,9 @@ font-size:12px;
 padding:6px 10px;
 border-radius:10px;
 cursor:pointer;
-opacity:0;
-transition:0.3s;
 }
 
-.album:hover .delete-album{
-opacity:1;
-}
-
-/* BOTONES */
+/* BOTON CREAR */
 .create-btn{
 margin:50px auto;
 display:block;
@@ -168,7 +171,6 @@ letter-spacing:2px;
 cursor:pointer;
 transition:0.3s;
 }
-
 .create-btn:hover{
 background:white;
 color:black;
@@ -248,7 +250,6 @@ justify-content:center;
 align-items:center;
 z-index:2000;
 }
-
 #lightbox img{
 max-width:90%;
 max-height:90%;
@@ -310,7 +311,7 @@ Cada viaje empieza contigo.
 
 <script>
 
-/* ===== ÁLBUMES ===== */
+/* ===== DATOS ===== */
 
 let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
 "París 2024": {photos:[], note:""},
@@ -318,58 +319,94 @@ let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
 "Próximo Destino ✨": {photos:[], note:""}
 };
 
-let currentAlbum = null;
+let currentAlbum=null;
 
-const albumGrid = document.getElementById("albumGrid");
-const gallery = document.getElementById("gallery");
-const albumView = document.getElementById("albumView");
-const photoView = document.getElementById("photoView");
-const pageTitle = document.getElementById("pageTitle");
-const noteField = document.getElementById("albumNote");
+const albumGrid=document.getElementById("albumGrid");
+const gallery=document.getElementById("gallery");
+const albumView=document.getElementById("albumView");
+const photoView=document.getElementById("photoView");
+const pageTitle=document.getElementById("pageTitle");
+const noteField=document.getElementById("albumNote");
 
 function saveAlbums(){
 localStorage.setItem("viajesAlbums", JSON.stringify(albums));
 }
 
+/* ===== RENDER ALBUMES ===== */
+
 function renderAlbums(){
 albumGrid.innerHTML="";
-for(let name in albums){
+
+Object.keys(albums).forEach(name=>{
+const data=albums[name];
 
 const div=document.createElement("div");
-div.classList.add("album");
+div.className="album";
 
-const data=albums[name];
-const cover=data.photos[0];
-
-if(cover){
+if(data.photos[0]){
 const img=document.createElement("img");
-img.src=cover;
+img.src=data.photos[0];
 div.appendChild(img);
 }
 
-div.innerHTML+=`
-<div class="photo-count">${data.photos.length} fotos</div>
-<h3>${name}</h3>
-<button class="delete-album">Eliminar</button>
-`;
+const count=document.createElement("div");
+count.className="photo-count";
+count.textContent=data.photos.length+" fotos";
 
-div.querySelector(".delete-album").onclick=(e)=>{
+const title=document.createElement("div");
+title.className="album-title";
+title.textContent=name;
+
+const actions=document.createElement("div");
+actions.className="album-actions";
+
+const editBtn=document.createElement("button");
+editBtn.className="action-btn";
+editBtn.textContent="Editar";
+
+editBtn.onclick=(e)=>{
 e.stopPropagation();
-if(confirm("¿Eliminar este álbum?")){
+let newName=prompt("Nuevo nombre del álbum:",name);
+if(newName && !albums[newName]){
+albums[newName]=albums[name];
 delete albums[name];
 saveAlbums();
 renderAlbums();
 }
 };
 
+const deleteBtn=document.createElement("button");
+deleteBtn.className="action-btn";
+deleteBtn.textContent="Eliminar";
+
+deleteBtn.onclick=(e)=>{
+e.stopPropagation();
+if(confirm("¿Eliminar este álbum completo?")){
+delete albums[name];
+saveAlbums();
+renderAlbums();
+}
+};
+
+actions.appendChild(editBtn);
+actions.appendChild(deleteBtn);
+
+div.appendChild(count);
+div.appendChild(actions);
+div.appendChild(title);
+
 div.onclick=()=>openAlbum(name);
+
 albumGrid.appendChild(div);
+});
 }
-}
+
 renderAlbums();
 
+/* ===== RESTO FUNCIONES ===== */
+
 function createAlbum(){
-const name=prompt("Nombre del nuevo viaje:");
+let name=prompt("Nombre del nuevo viaje:");
 if(name && !albums[name]){
 albums[name]={photos:[],note:""};
 saveAlbums();
@@ -382,7 +419,7 @@ currentAlbum=name;
 pageTitle.textContent=name;
 albumView.style.display="none";
 photoView.style.display="block";
-noteField.value=albums[name].note || "";
+noteField.value=albums[name].note;
 renderPhotos();
 }
 
@@ -397,7 +434,7 @@ function renderPhotos(){
 gallery.innerHTML="";
 albums[currentAlbum].photos.forEach((src,index)=>{
 const div=document.createElement("div");
-div.classList.add("photo");
+div.className="photo";
 
 const img=document.createElement("img");
 img.src=src;
@@ -407,7 +444,7 @@ document.getElementById("lightboxImg").src=src;
 };
 
 const btn=document.createElement("button");
-btn.classList.add("delete-btn");
+btn.className="delete-btn";
 btn.textContent="✕";
 btn.onclick=()=>{
 if(confirm("¿Eliminar esta foto?")){
@@ -443,63 +480,6 @@ saveAlbums();
 document.getElementById("lightbox").onclick=function(){
 this.style.display="none";
 };
-
-/* ===== FONDO ANIMADO ===== */
-
-const canvas=document.getElementById("bgCanvas");
-const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let particles=[];
-for(let i=0;i<40;i++){
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-r:Math.random()*2,
-d:Math.random()*0.5
-});
-}
-
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-ctx.fillStyle="rgba(255,255,255,0.05)";
-ctx.beginPath();
-particles.forEach(p=>{
-ctx.moveTo(p.x,p.y);
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
-});
-ctx.fill();
-update();
-}
-
-function update(){
-particles.forEach(p=>{
-p.y+=p.d;
-if(p.y>canvas.height){
-p.y=0;
-p.x=Math.random()*canvas.width;
-}
-});
-}
-setInterval(draw,33);
-
-/* ===== MÚSICA GLOBAL ===== */
-
-let music=document.createElement("audio");
-music.src="musica.mp3";
-music.loop=true;
-document.body.appendChild(music);
-
-window.addEventListener("load",()=>{
-const savedTime=localStorage.getItem("musicTime");
-if(savedTime) music.currentTime=parseFloat(savedTime);
-music.play().catch(()=>{});
-});
-
-setInterval(()=>{
-localStorage.setItem("musicTime",music.currentTime);
-},1000);
 
 </script>
 
