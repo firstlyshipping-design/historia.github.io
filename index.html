@@ -278,13 +278,25 @@ document.querySelector("nav").style.background="rgba(0,0,0,0.45)";
 }
 });
 
-/* ===== MÚSICA ===== */
+const music = document.getElementById("music");
 
-const music=document.getElementById("music");
+/* Restaurar tiempo */
+window.addEventListener("load", () => {
+const savedTime = localStorage.getItem("musicTime");
+if(savedTime){
+music.currentTime = parseFloat(savedTime);
+}
+});
 
-document.body.addEventListener("touchstart",()=>{
+/* Guardar tiempo constantemente */
+setInterval(() => {
+localStorage.setItem("musicTime", music.currentTime);
+}, 1000);
+
+/* Activar música en primer toque */
+document.body.addEventListener("touchstart", () => {
 music.play();
-},{once:true});
+}, {once:true});
 
 </script>
 
