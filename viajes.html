@@ -4,248 +4,135 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Viajes</title>
-
 <style>
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#111;
-color:white;
-padding:20px;
-}
-
-h1{
-text-align:center;
-}
-
-button{
-padding:8px 12px;
-margin:5px 0;
-cursor:pointer;
-}
-
-.album{
-border:1px solid #333;
-padding:15px;
-margin:10px 0;
-border-radius:8px;
-background:#1a1a1a;
-}
-
-.album-title{
-font-weight:bold;
-cursor:pointer;
-}
-
-.photo{
-display:inline-block;
-margin:5px;
-position:relative;
-}
-
-.photo img{
-width:120px;
-height:120px;
-object-fit:cover;
-border-radius:6px;
-}
-
-.delete-photo{
-position:absolute;
-top:0;
-right:0;
-background:red;
-color:white;
-border:none;
-cursor:pointer;
-}
-
-.controls button{
-margin-right:5px;
-}
-
-textarea{
-width:100%;
-margin-top:10px;
-}
+body{margin:0;font-family:'Playfair Display', serif;background:#111;color:white;padding:20px;}
+h1{text-align:center;margin-bottom:30px;}
+button{padding:8px 12px;margin:5px 0;cursor:pointer;border-radius:6px;border:none;background:#222;color:white;}
+button:hover{background:#555;}
+.album{border:1px solid #333;padding:15px;margin:10px 0;border-radius:8px;background:#1a1a1a;display:flex;justify-content:space-between;align-items:center;}
+.album-title{cursor:pointer;}
+.controls button{margin-left:5px;}
+#photoView{display:none;}
+.photo{display:inline-block;position:relative;margin:5px;}
+.photo img{width:120px;height:120px;object-fit:cover;border-radius:6px;}
+.delete-photo{position:absolute;top:0;right:0;background:red;color:white;border:none;border-radius:4px;cursor:pointer;}
+textarea{width:100%;margin-top:10px;padding:10px;border-radius:6px;border:none;background:#222;color:white;}
 </style>
 </head>
 <body>
 
-<h1>Álbumes de Viajes</h1>
-
+<h1>Álbumes de Viaje</h1>
 <div id="albumList"></div>
-
 <button onclick="crearAlbum()">Crear Álbum</button>
 
+<div id="albumView">
 <hr>
-
-<div id="albumView" style="display:none;">
-<button onclick="volver()">Volver</button>
+<button onclick="volver()">← Volver</button>
 <h2 id="albumNombre"></h2>
-
 <input type="file" id="inputFotos" multiple accept="image/*">
-
 <div id="fotos"></div>
-
 <textarea id="nota" placeholder="Escribe algo sobre este viaje..."></textarea>
-
 <button onclick="guardarNota()">Guardar Nota</button>
 </div>
 
 <script>
-
 let albums = JSON.parse(localStorage.getItem("albumsViajes")) || {
 "París": { fotos: [], nota: "" },
 "Roma": { fotos: [], nota: "" }
 };
-
 let albumActual = null;
 
-function guardarDatos(){
-localStorage.setItem("albumsViajes", JSON.stringify(albums));
-}
+function guardarDatos(){localStorage.setItem("albumsViajes", JSON.stringify(albums));}
 
 function mostrarAlbums(){
-const contenedor = document.getElementById("albumList");
-contenedor.innerHTML = "";
-
-for(let nombre in albums){
-
+const cont = document.getElementById("albumList");
+cont.innerHTML="";
+Object.keys(albums).forEach(nombre=>{
 const div = document.createElement("div");
 div.className = "album";
 
-const titulo = document.createElement("div");
+const titulo = document.createElement("span");
 titulo.className = "album-title";
 titulo.textContent = nombre;
 titulo.onclick = () => abrirAlbum(nombre);
 
-const controles = document.createElement("div");
-controles.className = "controls";
+const controles = document.createElement("span");
+controles.className="controls";
 
 const editar = document.createElement("button");
-editar.textContent = "Editar";
-editar.onclick = () => editarAlbum(nombre);
+editar.textContent="Editar";
+editar.onclick = (e)=>{ e.stopPropagation();
+let nuevo = prompt("Nuevo nombre:", nombre);
+if(!nuevo || albums[nuevo]) return alert("Nombre ya existe o vacío");
+albums[nuevo]=albums[nombre]; delete albums[nombre]; guardarDatos(); mostrarAlbums();
+};
 
 const eliminar = document.createElement("button");
-eliminar.textContent = "Eliminar";
-eliminar.onclick = () => eliminarAlbum(nombre);
+eliminar.textContent="Eliminar";
+eliminar.onclick = (e)=>{ e.stopPropagation();
+if(confirm("¿Eliminar álbum?")){delete albums[nombre]; guardarDatos(); mostrarAlbums();}
+};
 
 controles.appendChild(editar);
 controles.appendChild(eliminar);
-
 div.appendChild(titulo);
 div.appendChild(controles);
-
-contenedor.appendChild(div);
-}
+cont.appendChild(div);
+});
 }
 
 function crearAlbum(){
 let nombre = prompt("Nombre del nuevo álbum:");
-if(!nombre) return;
-if(albums[nombre]){
-alert("Ya existe un álbum con ese nombre");
-return;
-}
+if(!nombre || albums[nombre]) return alert("Nombre inválido o ya existe");
 albums[nombre] = { fotos: [], nota: "" };
-guardarDatos();
-mostrarAlbums();
-}
-
-function editarAlbum(nombre){
-let nuevo = prompt("Nuevo nombre:", nombre);
-if(!nuevo) return;
-if(albums[nuevo]){
-alert("Ya existe ese nombre");
-return;
-}
-albums[nuevo] = albums[nombre];
-delete albums[nombre];
-guardarDatos();
-mostrarAlbums();
-}
-
-function eliminarAlbum(nombre){
-if(confirm("¿Seguro que quieres eliminar este álbum?")){
-delete albums[nombre];
-guardarDatos();
-mostrarAlbums();
-}
+guardarDatos(); mostrarAlbums();
 }
 
 function abrirAlbum(nombre){
 albumActual = nombre;
-document.getElementById("albumList").style.display = "none";
-document.getElementById("albumView").style.display = "block";
+document.getElementById("albumList").style.display="none";
+document.getElementById("albumView").style.display="block";
 document.getElementById("albumNombre").textContent = nombre;
 document.getElementById("nota").value = albums[nombre].nota;
 mostrarFotos();
 }
 
 function volver(){
-document.getElementById("albumView").style.display = "none";
-document.getElementById("albumList").style.display = "block";
-albumActual = null;
+document.getElementById("albumView").style.display="none";
+document.getElementById("albumList").style.display="block";
+albumActual=null;
 mostrarAlbums();
 }
 
 function mostrarFotos(){
 const cont = document.getElementById("fotos");
-cont.innerHTML = "";
-
-albums[albumActual].fotos.forEach((foto, index) => {
-
-const div = document.createElement("div");
-div.className = "photo";
-
-const img = document.createElement("img");
-img.src = foto;
-
-const btn = document.createElement("button");
-btn.textContent = "X";
-btn.className = "delete-photo";
-btn.onclick = () => borrarFoto(index);
-
-div.appendChild(img);
-div.appendChild(btn);
-
+cont.innerHTML="";
+albums[albumActual].fotos.forEach((foto,i)=>{
+const div = document.createElement("div"); div.className="photo";
+const img = document.createElement("img"); img.src=foto;
+const del = document.createElement("button"); del.textContent="X"; del.className="delete-photo";
+del.onclick = ()=>{albums[albumActual].fotos.splice(i,1); guardarDatos(); mostrarFotos();}
+div.appendChild(img); div.appendChild(del);
 cont.appendChild(div);
-
 });
-}
-
-function borrarFoto(index){
-albums[albumActual].fotos.splice(index,1);
-guardarDatos();
-mostrarFotos();
 }
 
 document.getElementById("inputFotos").addEventListener("change", function(e){
-
-const files = e.target.files;
-
-for(let i=0;i<files.length;i++){
+[...e.target.files].forEach(file=>{
 const reader = new FileReader();
-reader.onload = function(event){
-albums[albumActual].fotos.push(event.target.result);
-guardarDatos();
-mostrarFotos();
-};
-reader.readAsDataURL(files[i]);
-}
-
-this.value = "";
+reader.onload = (ev)=>{albums[albumActual].fotos.push(ev.target.result); guardarDatos(); mostrarFotos();}
+reader.readAsDataURL(file);
+});
+this.value="";
 });
 
 function guardarNota(){
-albums[albumActual].nota = document.getElementById("nota").value;
+albums[albumActual].nota=document.getElementById("nota").value;
 guardarDatos();
 alert("Nota guardada");
 }
 
 mostrarAlbums();
-
 </script>
 
 </body>
