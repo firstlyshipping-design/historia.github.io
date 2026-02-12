@@ -9,11 +9,7 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
 background:#0b0b10;
@@ -50,68 +46,77 @@ margin-left:15px;
 font-size:0.75rem;
 letter-spacing:2px;
 opacity:0.6;
-transition:0.3s;
 }
 
-.menu a:hover{
-opacity:1;
-}
+/* MAIN */
 
-/* HERO */
-
-.hero{
+.container{
 padding-top:110px;
-text-align:center;
-padding-bottom:40px;
+max-width:1100px;
+margin:auto;
+padding-left:20px;
+padding-right:20px;
 }
 
-.hero h1{
+/* TITULO */
+
+h1{
+text-align:center;
 font-weight:400;
 letter-spacing:3px;
-margin-bottom:15px;
+margin-bottom:40px;
 }
 
-.hero p{
-opacity:0.6;
+/* ALBUM GRID */
+
+.album-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:18px;
+}
+
+.album{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.08);
+padding:30px 15px;
+border-radius:18px;
+text-align:center;
+cursor:pointer;
+transition:0.3s ease;
+}
+
+.album:hover{
+background:rgba(255,255,255,0.1);
+transform:translateY(-4px);
+}
+
+.album h3{
+font-weight:400;
+letter-spacing:2px;
 font-size:0.9rem;
 }
 
-/* UPLOAD BUTTON */
+/* BOTON CREAR */
 
-.upload-container{
-text-align:center;
-margin:30px 0;
-}
-
-.upload-label{
-display:inline-block;
-padding:12px 25px;
+.create-btn{
+margin:40px auto;
+display:block;
+padding:10px 25px;
 border:1px solid rgba(255,255,255,0.4);
 border-radius:30px;
-cursor:pointer;
-font-size:0.8rem;
+background:none;
+color:white;
 letter-spacing:2px;
-transition:0.3s;
-}
-
-.upload-label:hover{
-background:white;
-color:black;
-}
-
-input[type="file"]{
-display:none;
+cursor:pointer;
 }
 
 /* GALLERY */
 
 .gallery{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
 gap:12px;
-padding:20px;
-max-width:1100px;
-margin:auto;
+margin-top:30px;
 }
 
 .photo{
@@ -125,37 +130,46 @@ width:100%;
 height:100%;
 object-fit:cover;
 display:block;
-transition:transform 0.6s ease;
-}
-
-.photo:hover img{
-transform:scale(1.05);
 }
 
 .delete-btn{
 position:absolute;
-top:8px;
-right:8px;
+top:6px;
+right:6px;
 background:rgba(0,0,0,0.6);
 border:none;
 color:white;
-font-size:12px;
-padding:4px 8px;
+font-size:11px;
+padding:4px 7px;
 cursor:pointer;
-border-radius:8px;
-opacity:0;
-transition:0.3s;
+border-radius:6px;
 }
 
-.photo:hover .delete-btn{
-opacity:1;
+/* BOTON VOLVER */
+
+.back-btn{
+margin-top:30px;
+display:inline-block;
+cursor:pointer;
+opacity:0.6;
 }
 
-/* FOOTER */
+input[type="file"]{display:none;}
+
+.upload-label{
+display:inline-block;
+margin-top:20px;
+padding:10px 20px;
+border:1px solid rgba(255,255,255,0.4);
+border-radius:30px;
+cursor:pointer;
+font-size:0.75rem;
+letter-spacing:2px;
+}
 
 footer{
 text-align:center;
-padding:50px 20px;
+padding:60px 20px;
 font-size:0.7rem;
 opacity:0.4;
 }
@@ -172,19 +186,27 @@ opacity:0.4;
 </div>
 </nav>
 
-<div class="hero">
-<h1>Álbum de Aventuras</h1>
-<p>Aquí guardaremos cada lugar que descubramos juntos.</p>
+<div class="container">
+
+<h1 id="pageTitle">Álbumes</h1>
+
+<div id="albumView">
+<div class="album-grid" id="albumGrid"></div>
+<button class="create-btn" onclick="createAlbum()">Crear Nuevo Álbum</button>
 </div>
 
-<div class="upload-container">
+<div id="photoView" style="display:none;">
+<span class="back-btn" onclick="goBack()">← Volver</span>
+
 <label class="upload-label">
-Subir Recuerdo
+Subir Fotos
 <input type="file" id="photoInput" accept="image/*" multiple>
 </label>
-</div>
 
 <div class="gallery" id="gallery"></div>
+</div>
+
+</div>
 
 <footer>
 Cada viaje empieza contigo.
@@ -192,66 +214,103 @@ Cada viaje empieza contigo.
 
 <script>
 
-const input = document.getElementById("photoInput");
-const gallery = document.getElementById("gallery");
-
-/* Cargar fotos guardadas */
-window.addEventListener("load", () => {
-const savedPhotos = JSON.parse(localStorage.getItem("viajesPhotos")) || [];
-savedPhotos.forEach(src => addPhotoToGallery(src));
-});
-
-/* Subir nuevas fotos */
-input.addEventListener("change", (event) => {
-const files = event.target.files;
-
-for (let file of files) {
-const reader = new FileReader();
-reader.onload = function(e) {
-const imageSrc = e.target.result;
-addPhotoToGallery(imageSrc);
-savePhoto(imageSrc);
+let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
+"París 2024": [],
+"Italia 2025": [],
+"Próximo Destino ✨": []
 };
-reader.readAsDataURL(file);
+
+let currentAlbum = null;
+
+const albumGrid = document.getElementById("albumGrid");
+const gallery = document.getElementById("gallery");
+const albumView = document.getElementById("albumView");
+const photoView = document.getElementById("photoView");
+const pageTitle = document.getElementById("pageTitle");
+
+/* Guardar */
+function saveAlbums(){
+localStorage.setItem("viajesAlbums", JSON.stringify(albums));
 }
 
-});
+/* Mostrar álbumes */
+function renderAlbums(){
+albumGrid.innerHTML="";
+for(let name in albums){
+const div=document.createElement("div");
+div.classList.add("album");
+div.innerHTML=`<h3>${name}</h3>`;
+div.onclick=()=>openAlbum(name);
+albumGrid.appendChild(div);
+}
+}
 
-/* Añadir foto */
-function addPhotoToGallery(src) {
-const div = document.createElement("div");
+renderAlbums();
+
+/* Crear álbum */
+function createAlbum(){
+const name=prompt("Nombre del nuevo viaje:");
+if(name){
+albums[name]=[];
+saveAlbums();
+renderAlbums();
+}
+}
+
+/* Abrir álbum */
+function openAlbum(name){
+currentAlbum=name;
+pageTitle.textContent=name;
+albumView.style.display="none";
+photoView.style.display="block";
+renderPhotos();
+}
+
+/* Volver */
+function goBack(){
+photoView.style.display="none";
+albumView.style.display="block";
+pageTitle.textContent="Álbumes";
+}
+
+/* Mostrar fotos */
+function renderPhotos(){
+gallery.innerHTML="";
+albums[currentAlbum].forEach(src=>{
+const div=document.createElement("div");
 div.classList.add("photo");
 
-const img = document.createElement("img");
-img.src = src;
+const img=document.createElement("img");
+img.src=src;
 
-const btn = document.createElement("button");
+const btn=document.createElement("button");
 btn.classList.add("delete-btn");
-btn.textContent = "✕";
-
-btn.addEventListener("click", () => {
-div.remove();
-removePhoto(src);
-});
+btn.textContent="✕";
+btn.onclick=()=>{
+albums[currentAlbum]=albums[currentAlbum].filter(p=>p!==src);
+saveAlbums();
+renderPhotos();
+};
 
 div.appendChild(img);
 div.appendChild(btn);
 gallery.appendChild(div);
+});
 }
 
-/* Guardar en localStorage */
-function savePhoto(src) {
-let photos = JSON.parse(localStorage.getItem("viajesPhotos")) || [];
-photos.push(src);
-localStorage.setItem("viajesPhotos", JSON.stringify(photos));
+/* Subir fotos */
+document.getElementById("photoInput").addEventListener("change",function(e){
+const files=e.target.files;
+for(let file of files){
+const reader=new FileReader();
+reader.onload=function(event){
+albums[currentAlbum].push(event.target.result);
+saveAlbums();
+renderPhotos();
+};
+reader.readAsDataURL(file);
 }
-
-/* Eliminar */
-function removePhoto(src) {
-let photos = JSON.parse(localStorage.getItem("viajesPhotos")) || [];
-photos = photos.filter(photo => photo !== src);
-localStorage.setItem("viajesPhotos", JSON.stringify(photos));
-}
+});
 
 </script>
 
