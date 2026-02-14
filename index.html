@@ -366,6 +366,7 @@ link.addEventListener("click",()=>{
 menu.classList.remove("active");
 });
 });
+/* ===== MÚSICA GLOBAL COMPATIBLE MÓVIL ===== */ const music = document.getElementById("globalMusic"); /* Restaurar tiempo guardado */ window.addEventListener("load", () => { const savedTime = localStorage.getItem("musicTime"); if (savedTime) { music.currentTime = parseFloat(savedTime); } attemptAutoplay(); }); /* Intentar autoplay */ function attemptAutoplay() { const playPromise = music.play(); if (playPromise !== undefined) { playPromise .then(() => { // Autoplay funcionó }) .catch(() => { // Si el navegador bloquea, esperar primer toque enableOnFirstTouch(); }); } } /* Activar en primer toque (invisible) */ function enableOnFirstTouch() { const startMusic = () => { music.play().catch(() => { }); document.removeEventListener("touchstart", startMusic); document.removeEventListener("click", startMusic); }; document.addEventListener("touchstart", startMusic, { once: true }); document.addEventListener("click", startMusic, { once: true }); } /* Guardar tiempo constantemente */ setInterval(() => { if (!music.paused) { localStorage.setItem("musicTime", music.currentTime); } }, 1000); /* Si vuelve a la pestaña, reintentar */ document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && music.paused) { music.play().catch(() => { }); } });
 </script>
 
 </body>
