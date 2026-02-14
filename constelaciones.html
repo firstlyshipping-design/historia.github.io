@@ -12,28 +12,28 @@
 html, body {
     height:100%;
     font-family: 'Playfair Display', serif;
-    background: radial-gradient(ellipse at center, #0b0b10 0%, #05050b 100%);
     color:white;
     overflow-x:hidden;
     scroll-behavior: smooth;
+    background: radial-gradient(ellipse at center, #0b0b10 0%, #02020a 100%);
 }
 
 /* ===== NAVBAR ===== */
 nav {
     position: fixed;
     top:0; left:0; width:100%;
-    padding:18px 25px;
+    padding:20px 30px;
     display:flex;
     justify-content: space-between;
     align-items:center;
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
     z-index:1000;
     transition:0.4s;
 }
 nav.scrolled { background: rgba(0,0,0,0.85); }
-.logo { font-size:1rem; letter-spacing:3px; opacity:0.85; font-weight:500; }
-.menu a { text-decoration:none; color:white; margin-left:20px; font-size:0.9rem; opacity:0.7; transition:0.3s; }
+.logo { font-size:1rem; letter-spacing:3px; font-weight:500; opacity:0.9; }
+.menu a { color:white; text-decoration:none; margin-left:25px; font-size:0.9rem; opacity:0.7; transition:0.3s; }
 .menu a:hover { opacity:1; }
 
 /* ===== CONSTELACIÓN ===== */
@@ -44,36 +44,36 @@ nav.scrolled { background: rgba(0,0,0,0.85); }
     overflow:hidden;
 }
 
-/* Partículas de fondo */
+/* Partículas fondo (pequeñas) */
 .particle {
     position:absolute;
-    width:3px; height:3px;
+    width:2px; height:2px;
     background:white;
     border-radius:50%;
-    opacity:0.5;
+    opacity:0.3;
     animation: twinkle linear infinite;
 }
 @keyframes twinkle {
-    0%,100% { opacity:0.2; transform: translateY(0); }
-    50% { opacity:1; transform: translateY(-2px); }
+    0%,100%{opacity:0.2;}
+    50%{opacity:1;}
 }
 
-/* Estrellas grandes */
+/* Estrellas principales */
 .star {
     position: absolute;
-    width:14px; height:14px;
-    background:white;
+    width:16px; height:16px;
+    background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0.6) 60%);
     border-radius:50%;
-    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+    box-shadow: 0 0 20px rgba(255,255,255,0.7);
     cursor:pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.4s, box-shadow 0.4s;
 }
 .star:hover {
     transform: scale(2);
-    box-shadow: 0 0 30px rgba(255,255,255,1);
+    box-shadow: 0 0 40px rgba(255,255,255,1);
 }
 
-/* Líneas dinámicas */
+/* Conexiones entre estrellas */
 .line {
     position: absolute;
     width:2px;
@@ -81,14 +81,14 @@ nav.scrolled { background: rgba(0,0,0,0.85); }
     transform-origin: top left;
 }
 
-/* POPUP elegante */
+/* POPUP elegante con efecto vidrio */
 .popup {
     position: absolute;
     background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
     padding:20px;
-    border-radius:15px;
-    max-width:250px;
+    border-radius:18px;
+    max-width:270px;
     display:none;
     font-size:0.95rem;
     line-height:1.5;
@@ -99,28 +99,45 @@ nav.scrolled { background: rgba(0,0,0,0.85); }
 }
 .popup img {
     width:100%;
-    border-radius:10px;
+    border-radius:12px;
     margin-top:10px;
 }
-@keyframes popupFade { from {opacity:0; transform: scale(0.9);} to {opacity:1; transform: scale(1);} }
-
-/* RESPONSIVE */
-@media(max-width:768px){
-    .popup { max-width:180px; padding:15px; font-size:0.85rem; }
-    .star { width:12px; height:12px; }
+@keyframes popupFade {
+    from {opacity:0; transform: scale(0.9);}
+    to {opacity:1; transform: scale(1);}
 }
 
-@media(max-width:480px){
-    .popup { max-width:150px; font-size:0.8rem; padding:12px; }
-    .star { width:10px; height:10px; }
+/* Fondo con efecto parallax de estrellas grandes */
+.big-star {
+    position:absolute;
+    width:4px; height:4px;
+    background:white;
+    border-radius:50%;
+    opacity:0.7;
+    animation: drift 40s linear infinite;
+}
+@keyframes drift {
+    0% { transform: translateY(0);}
+    50% { transform: translateY(15px);}
+    100% { transform: translateY(0);}
 }
 
 /* FOOTER */
 footer {
-    padding:60px 20px;
+    padding:80px 20px;
     text-align:center;
     font-size:0.75rem;
     opacity:0.4;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    .popup { max-width:200px; padding:15px; font-size:0.85rem; }
+    .star { width:14px; height:14px; }
+}
+@media(max-width:480px){
+    .popup { max-width:160px; font-size:0.8rem; padding:12px; }
+    .star { width:12px; height:12px; }
 }
 </style>
 </head>
@@ -145,13 +162,20 @@ footer {
 <script>
 // ===== PARTICULAS DE FONDO =====
 const container = document.getElementById('constellation');
-for(let i=0;i<80;i++){
+for(let i=0;i<120;i++){
     const p = document.createElement('div');
     p.classList.add('particle');
     p.style.top = Math.random()*100+'%';
     p.style.left = Math.random()*100+'%';
     p.style.animationDuration = (2+Math.random()*3)+'s';
     container.appendChild(p);
+}
+for(let i=0;i<30;i++){
+    const bs = document.createElement('div');
+    bs.classList.add('big-star');
+    bs.style.top = Math.random()*100+'%';
+    bs.style.left = Math.random()*100+'%';
+    container.appendChild(bs);
 }
 
 // ===== DATOS DE ESTRELLAS =====
@@ -165,16 +189,16 @@ const starsData = [
 
 const popup = document.getElementById('popup');
 
-// ===== CREAR ESTRELLAS Y CONEXIONES =====
-starsData.forEach((star,i)=>{
+// ===== CREAR ESTRELLAS =====
+starsData.forEach((star)=>{
     const el = document.createElement('div');
     el.classList.add('star');
     el.style.top = star.y + '%';
     el.style.left = star.x + '%';
     container.appendChild(el);
 
-    // Hover / popup
-    el.addEventListener('mouseenter', e=>{
+    // Hover popup
+    el.addEventListener('mouseenter', ()=>{
         popup.style.display = 'block';
         popup.innerHTML = `<strong>${star.title}</strong><p>${star.text}</p><img src="${star.img}" alt="${star.title}">`;
     });
@@ -182,12 +206,12 @@ starsData.forEach((star,i)=>{
         popup.style.top = (e.clientY + 15)+'px';
         popup.style.left = (e.clientX + 15)+'px';
     });
-    el.addEventListener('mouseleave', e=>{
+    el.addEventListener('mouseleave', ()=>{
         popup.style.display = 'none';
     });
 });
 
-// ===== ANIMACION NAVBAR =====
+// ===== NAVBAR ANIMADA =====
 window.addEventListener('scroll', ()=>{
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
 });
@@ -195,3 +219,4 @@ window.addEventListener('scroll', ()=>{
 
 </body>
 </html>
+
