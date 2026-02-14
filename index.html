@@ -8,13 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-
-/* ===== RESET ===== */
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 html,body{
 background:#0b0b10;
@@ -24,8 +18,7 @@ overflow-x:hidden;
 scroll-behavior:smooth;
 }
 
-/* ===== INTRO CINEMÁTICA ===== */
-
+/* INTRO */
 .intro{
 position:fixed;
 width:100%;
@@ -41,14 +34,10 @@ animation:fadeOutIntro 3s ease 2.5s forwards;
 }
 
 @keyframes fadeOutIntro{
-to{
-opacity:0;
-visibility:hidden;
-}
+to{opacity:0;visibility:hidden;}
 }
 
-/* ===== NAVBAR ===== */
-
+/* NAV */
 nav{
 position:fixed;
 top:0;
@@ -63,11 +52,7 @@ z-index:1000;
 transition:0.4s ease;
 }
 
-.logo{
-font-size:0.75rem;
-letter-spacing:3px;
-opacity:0.85;
-}
+.logo{font-size:0.75rem;letter-spacing:3px;opacity:0.85;}
 
 .menu a{
 text-decoration:none;
@@ -78,13 +63,9 @@ letter-spacing:2px;
 opacity:0.6;
 transition:0.3s;
 }
+.menu a:hover{opacity:1;}
 
-.menu a:hover{
-opacity:1;
-}
-
-/* ===== HERO SLIDER ===== */
-
+/* SLIDER */
 .slider{
 position:relative;
 height:100vh;
@@ -116,8 +97,7 @@ height:100%;
 background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.85));
 }
 
-/* ===== HERO TEXT ===== */
-
+/* HERO TEXT */
 .hero-text{
 position:absolute;
 bottom:130px;
@@ -133,13 +113,8 @@ padding:0 20px;
 }
 
 @keyframes heroFade{
-to{
-opacity:0.9;
-transform:translateY(0);
+to{opacity:0.9;transform:translateY(0);}
 }
-}
-
-/* ===== CONTADOR ===== */
 
 .counter{
 position:absolute;
@@ -153,8 +128,7 @@ animation:heroFade 2.5s ease forwards;
 animation-delay:3.5s;
 }
 
-/* ===== SECCIONES ===== */
-
+/* SECCIONES */
 .section{
 padding:90px 22px;
 max-width:520px;
@@ -165,10 +139,7 @@ transform:translateY(40px);
 transition:1s ease;
 }
 
-.section.visible{
-opacity:1;
-transform:translateY(0);
-}
+.section.visible{opacity:1;transform:translateY(0);}
 
 .section h2{
 font-size:1.6rem;
@@ -192,8 +163,6 @@ margin:40px auto;
 opacity:0.3;
 }
 
-/* ===== FOOTER ===== */
-
 footer{
 padding:70px 20px;
 text-align:center;
@@ -202,15 +171,12 @@ opacity:0.4;
 }
 
 audio{display:none;}
-
 </style>
 </head>
 
 <body>
 
-<div class="intro">
-Esta es nuestra historia…
-</div>
+<div class="intro">Esta es nuestra historia…</div>
 
 <nav>
 <div class="logo">NUESTRA HISTORIA</div>
@@ -232,60 +198,29 @@ Esta es nuestra historia…
 <div class="slide" style="background-image:url('momento3.jpg')"></div>
 
 <div class="overlay"></div>
-
 <div class="hero-text" id="heroPhrase"></div>
 <div class="counter" id="counter"></div>
 
 </div>
 
-<div class="section">
-<h2>Todo empezó sin planearlo</h2>
-<p>
-Y terminó siendo lo más bonito que me ha pasado. Desde aquel día en el que los dos empezamos a sentir por el otro, se juntaron dos deseos que han sido capaces de evolucionar en unos sentimientos capaces de deslumbrar nuestra relación. El camino que nos queda, Victoria, está construyéndose de manera que los dos seamos capaces de disfrutar cada momento juntos. Cada viaje, cada sonrisa, cada lágrima… momentos para recordar que quedarán guardados para siempre. Y seguramente, algún día, nos sentemos abrazados en nuestro sofá y podamos ver todo esto recopilado en un mismo lugar.
-</p>
-<div class="divider"></div>
-</div>
-
-<div class="section">
-<h2>Momentos</h2>
-<p>
-Risas. Viajes. Silencios que dicen más que mil palabras.  
-Es por eso por lo que este “rinconcito” ha sido creado, para que cuando queramos mirar nuestro camino juntos, lo podamos disfrutar en cada momento y en cada lugar en el que estemos. Lo iremos actualizando juntos, cada 14 de febrero, donde subiremos todos los momentos que queremos que sean recordados para siempre.
-</p>
-<div class="divider"></div>
-</div>
-
-<div class="section">
-<h2>Lo que viene</h2>
-<p>
-No sé dónde será.  
-Pero sé que será contigo. Y cuando pienso en eso, todo lo demás deja de importarme, porque lo importante no es el lugar ni la situación, sino estar juntos en cada momento. Como cuando estamos cansados y nos tumbamos a dormir un rato, o cuando no nos decidimos dónde ir a comer pero sabemos que elegiremos un lugar que nos encantará a los dos. Incluso las fotos en las que alguno sale mal terminan siendo especiales, porque no capturan una imagen perfecta, sino un momento real. Y creo que de eso se trata todo: no de que sea impecable, sino de que sea auténtico. De cómo lo compartamos, de cómo lo vivamos tal y como venga, sabiendo que lo importante no es cómo se ve desde fuera, sino cómo se siente por dentro.
-</p>
-</div>
-
-<footer>
-Hecho con calma. Hecho contigo.
-</footer>
-
-<audio id="globalMusic" autoplay loop>
+<!-- AUDIO -->
+<audio id="globalMusic" loop playsinline>
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
-/* ===== FRASE DINÁMICA ===== */
-const frases = [
+/* FRASE DINÁMICA */
+const frases=[
 "Nuestra historia sigue escribiéndose.",
 "No sé dónde será, pero será contigo.",
 "Lo mejor nunca se planea.",
 "Nuestro lugar favorito es donde estemos juntos."
 ];
-
-document.getElementById("heroPhrase").textContent =
+document.getElementById("heroPhrase").textContent=
 frases[Math.floor(Math.random()*frases.length)];
 
-
-/* ===== SLIDER ===== */
+/* SLIDER */
 const slides=document.querySelectorAll(".slide");
 let current=0;
 function nextSlide(){
@@ -295,7 +230,7 @@ slides[current].classList.add("active");
 }
 setInterval(nextSlide,6500);
 
-/* ===== SCROLL REVEAL ===== */
+/* SCROLL REVEAL */
 const sections=document.querySelectorAll(".section");
 function reveal(){
 sections.forEach(sec=>{
@@ -307,7 +242,7 @@ sec.classList.add("visible");
 window.addEventListener("scroll",reveal);
 reveal();
 
-/* ===== NAVBAR OSCURA ===== */
+/* NAV OSCURA */
 window.addEventListener("scroll",()=>{
 document.querySelector("nav").style.background=
 window.scrollY>20
@@ -315,25 +250,52 @@ window.scrollY>20
 : "rgba(0,0,0,0.45)";
 });
 
-/* ===== MÚSICA PERSISTENTE ===== */
-const music = document.getElementById("globalMusic");
+/* ===== MÚSICA COMPATIBLE MÓVIL ===== */
 
-window.addEventListener("load", () => {
+const music=document.getElementById("globalMusic");
 
-const savedTime = localStorage.getItem("musicTime");
-if (savedTime) {
-music.currentTime = parseFloat(savedTime);
+window.addEventListener("load",()=>{
+
+const savedTime=localStorage.getItem("musicTime");
+if(savedTime){
+music.currentTime=parseFloat(savedTime);
 }
 
-music.play().catch(()=>{});
+attemptAutoplay();
 
 });
 
-setInterval(() => {
-if (!music.paused) {
-localStorage.setItem("musicTime", music.currentTime);
+function attemptAutoplay(){
+const promise=music.play();
+
+if(promise!==undefined){
+promise.catch(()=>{
+enableOnFirstTouch();
+});
 }
-}, 1000);
+}
+
+function enableOnFirstTouch(){
+const start=()=>{
+music.play().catch(()=>{});
+document.removeEventListener("touchstart",start);
+document.removeEventListener("click",start);
+};
+document.addEventListener("touchstart",start,{once:true});
+document.addEventListener("click",start,{once:true});
+}
+
+setInterval(()=>{
+if(!music.paused){
+localStorage.setItem("musicTime",music.currentTime);
+}
+},1000);
+
+document.addEventListener("visibilitychange",()=>{
+if(document.visibilityState==="visible" && music.paused){
+music.play().catch(()=>{});
+}
+});
 
 </script>
 
