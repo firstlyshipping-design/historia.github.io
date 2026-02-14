@@ -7,20 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
+/* ===== RESET ===== */
+* { margin:0; padding:0; box-sizing:border-box; }
 html, body {
-    margin:0;
-    padding:0;
     height:100%;
-    background: #0b0b10;
     font-family: 'Playfair Display', serif;
+    background: radial-gradient(ellipse at center, #0b0b10 0%, #05050b 100%);
     color:white;
     overflow-x:hidden;
+    scroll-behavior: smooth;
 }
 
+/* ===== NAVBAR ===== */
 nav {
     position: fixed;
-    top:0;
-    width:100%;
+    top:0; left:0; width:100%;
     padding:18px 25px;
     display:flex;
     justify-content: space-between;
@@ -28,67 +29,99 @@ nav {
     background: rgba(0,0,0,0.45);
     backdrop-filter: blur(12px);
     z-index:1000;
+    transition:0.4s;
 }
-nav.scrolled { background: rgba(0,0,0,0.75); }
-.logo { font-size:0.9rem; letter-spacing:3px; opacity:0.85; }
-.menu a { text-decoration:none; color:white; margin-left:20px; font-size:0.85rem; opacity:0.7; transition:0.3s; }
+nav.scrolled { background: rgba(0,0,0,0.85); }
+.logo { font-size:1rem; letter-spacing:3px; opacity:0.85; font-weight:500; }
+.menu a { text-decoration:none; color:white; margin-left:20px; font-size:0.9rem; opacity:0.7; transition:0.3s; }
 .menu a:hover { opacity:1; }
 
-/* ===== CONSTELACIONES ===== */
+/* ===== CONSTELACIÓN ===== */
 .constellation-container {
     position: relative;
-    width: 100%;
-    height: 100vh;
-    background: radial-gradient(ellipse at center, #0b0b10 0%, #05050b 100%);
-    overflow: hidden;
+    width:100%;
+    height:100vh;
+    overflow:hidden;
 }
 
+/* Partículas de fondo */
+.particle {
+    position:absolute;
+    width:3px; height:3px;
+    background:white;
+    border-radius:50%;
+    opacity:0.5;
+    animation: twinkle linear infinite;
+}
+@keyframes twinkle {
+    0%,100% { opacity:0.2; transform: translateY(0); }
+    50% { opacity:1; transform: translateY(-2px); }
+}
+
+/* Estrellas grandes */
 .star {
     position: absolute;
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255,255,255,0.6);
-    cursor: pointer;
-    transition: transform 0.3s;
+    width:14px; height:14px;
+    background:white;
+    border-radius:50%;
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+    cursor:pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .star:hover {
-    transform: scale(1.5);
-    box-shadow: 0 0 20px rgba(255,255,255,0.9);
+    transform: scale(2);
+    box-shadow: 0 0 30px rgba(255,255,255,1);
 }
 
-/* LINEAS ENTRE ESTRELLAS */
+/* Líneas dinámicas */
 .line {
     position: absolute;
-    width: 2px;
+    width:2px;
     background: rgba(255,255,255,0.2);
     transform-origin: top left;
 }
 
-/* POPUP */
+/* POPUP elegante */
 .popup {
     position: absolute;
-    background: rgba(255,255,255,0.05);
-    padding:15px;
-    border-radius:12px;
-    max-width:220px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+    padding:20px;
+    border-radius:15px;
+    max-width:250px;
     display:none;
-    font-size:0.9rem;
+    font-size:0.95rem;
     line-height:1.5;
     pointer-events:none;
     z-index:2000;
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    animation: popupFade 0.3s ease forwards;
 }
 .popup img {
     width:100%;
-    border-radius:8px;
-    margin-top:8px;
+    border-radius:10px;
+    margin-top:10px;
+}
+@keyframes popupFade { from {opacity:0; transform: scale(0.9);} to {opacity:1; transform: scale(1);} }
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    .popup { max-width:180px; padding:15px; font-size:0.85rem; }
+    .star { width:12px; height:12px; }
+}
+
+@media(max-width:480px){
+    .popup { max-width:150px; font-size:0.8rem; padding:12px; }
+    .star { width:10px; height:10px; }
 }
 
 /* FOOTER */
-footer { padding:60px 20px; text-align:center; font-size:0.75rem; opacity:0.4; }
-
+footer {
+    padding:60px 20px;
+    text-align:center;
+    font-size:0.75rem;
+    opacity:0.4;
+}
 </style>
 </head>
 <body>
@@ -97,61 +130,64 @@ footer { padding:60px 20px; text-align:center; font-size:0.75rem; opacity:0.4; }
     <div class="logo">Constelaciones de Momentos</div>
     <div class="menu">
         <a href="index.html">Inicio</a>
-        <a href="viajes.html">Nuestros Viajes</a>
-        <a href="pelicula.html">EL Momento</a>
-        <a href="timeline.html">TimeLine</a>
-        <a href="constelaciones.html">Nuestras Estrellas</a>
+        <a href="viajes.html">Viajes</a>
+        <a href="pelicula.html">El Momento</a>
+        <a href="timeline.html">Timeline</a>
     </div>
 </nav>
 
 <div class="constellation-container" id="constellation">
-    <!-- POPUP -->
     <div class="popup" id="popup"></div>
 </div>
 
-<footer>
-    Hecho con calma. Hecho contigo.
-</footer>
+<footer>Hecho con calma. Hecho contigo.</footer>
 
 <script>
+// ===== PARTICULAS DE FONDO =====
+const container = document.getElementById('constellation');
+for(let i=0;i<80;i++){
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.top = Math.random()*100+'%';
+    p.style.left = Math.random()*100+'%';
+    p.style.animationDuration = (2+Math.random()*3)+'s';
+    container.appendChild(p);
+}
+
 // ===== DATOS DE ESTRELLAS =====
 const starsData = [
-    { x: 10, y: 20, title:"Viaje a París", text:"Primera aventura juntos en la ciudad del amor.", img:"paris.jpg", group:"viaje" },
-    { x: 40, y: 25, title:"Escapada a Cancún", text:"Sol, mar y risas interminables.", img:"cancun.jpg", group:"viaje" },
-    { x: 70, y: 10, title:"Primer concierto juntos", text:"Nos emocionamos hasta llorar.", img:"concierto.jpg", group:"aventura" },
-    { x: 30, y: 60, title:"Día de lluvia en casa", text:"Risas y chocolate caliente.", img:"lluvia.jpg", group:"momento" },
-    { x: 80, y: 50, title:"Paseo por los Alpes", text:"Vistas impresionantes y frío abrazable.", img:"alpes.jpg", group:"viaje" }
+    { x: 10, y: 20, title:"Viaje a París", text:"Primera aventura juntos en la ciudad del amor.", img:"paris.jpg" },
+    { x: 40, y: 25, title:"Escapada a Cancún", text:"Sol, mar y risas interminables.", img:"cancun.jpg" },
+    { x: 70, y: 10, title:"Primer concierto juntos", text:"Nos emocionamos hasta llorar.", img:"concierto.jpg" },
+    { x: 30, y: 60, title:"Día de lluvia en casa", text:"Risas y chocolate caliente.", img:"lluvia.jpg" },
+    { x: 80, y: 50, title:"Paseo por los Alpes", text:"Vistas impresionantes y frío abrazable.", img:"alpes.jpg" }
 ];
 
-const container = document.getElementById('constellation');
 const popup = document.getElementById('popup');
 
-// Crear estrellas
+// ===== CREAR ESTRELLAS Y CONEXIONES =====
 starsData.forEach((star,i)=>{
     const el = document.createElement('div');
     el.classList.add('star');
     el.style.top = star.y + '%';
     el.style.left = star.x + '%';
-    el.dataset.index = i;
     container.appendChild(el);
 
+    // Hover / popup
     el.addEventListener('mouseenter', e=>{
-        const s = starsData[e.target.dataset.index];
         popup.style.display = 'block';
-        popup.innerHTML = `<strong>${s.title}</strong><p>${s.text}</p><img src="${s.img}" alt="${s.title}">`;
+        popup.innerHTML = `<strong>${star.title}</strong><p>${star.text}</p><img src="${star.img}" alt="${star.title}">`;
     });
-
     el.addEventListener('mousemove', e=>{
-        popup.style.top = (e.clientY + 15) + 'px';
-        popup.style.left = (e.clientX + 15) + 'px';
+        popup.style.top = (e.clientY + 15)+'px';
+        popup.style.left = (e.clientX + 15)+'px';
     });
-
     el.addEventListener('mouseleave', e=>{
         popup.style.display = 'none';
     });
 });
 
-// ===== NAVBAR OSCURA =====
+// ===== ANIMACION NAVBAR =====
 window.addEventListener('scroll', ()=>{
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
 });
