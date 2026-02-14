@@ -7,207 +7,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+/* ===== RESET ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-font-family:'Playfair Display', serif;
-background:linear-gradient(180deg,#0b0b10,#141420);
-color:white;
-overflow-x:hidden;
-padding-top:110px;
-}
-
-/* NAV */
-nav{
-position:fixed;
-top:0;
-width:100%;
-padding:20px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(15px);
-z-index:1000;
-}
-
-.logo{letter-spacing:3px;font-size:0.9rem;}
-.menu a{
-text-decoration:none;
-color:white;
-margin-left:20px;
-font-size:0.8rem;
-opacity:0.6;
-transition:0.3s;
-}
-.menu a:hover{opacity:1;}
-
-h1{
-text-align:center;
-margin-bottom:50px;
-letter-spacing:4px;
-font-weight:400;
-opacity:0.9;
-}
+body{font-family:'Playfair Display', serif;background:linear-gradient(180deg,#0b0b10,#141420);color:white;overflow-x:hidden;padding-top:100px;}
+h1{text-align:center;margin-bottom:40px;letter-spacing:4px;font-weight:400;}
+nav{position:fixed;top:0;width:100%;padding:18px 30px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(12px);z-index:1000;}
+nav .logo{font-size:1rem;letter-spacing:3px;}
+nav .menu a{text-decoration:none;color:white;margin-left:20px;font-size:0.85rem;opacity:0.7;transition:0.3s;}
+nav .menu a:hover{opacity:1;}
 
 /* CONTENEDOR */
-.container{max-width:1200px;margin:auto;padding:0 25px;}
+.container{max-width:1200px;margin:auto;padding:0 20px;}
 
 /* ÁLBUMES */
-.album-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:30px;
-margin-bottom:50px;
-}
+.album-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;margin-bottom:40px;}
+.album{position:relative;height:220px;border-radius:20px;overflow:hidden;background:rgba(255,255,255,0.05);display:flex;align-items:flex-end;padding:20px;cursor:pointer;transition:0.3s;}
+.album:hover{transform:scale(1.03);}
+.album img{position:absolute;width:100%;height:100%;object-fit:cover;top:0;left:0;z-index:-1;}
+.album::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);}
+.album-title{position:relative;font-weight:500;font-size:1rem;}
+.album-actions{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:2;}
+.action-btn{background:rgba(0,0,0,0.7);border:none;color:white;font-size:11px;padding:5px 8px;border-radius:8px;cursor:pointer;}
 
-.album{
-position:relative;
-height:240px;
-border-radius:22px;
-overflow:hidden;
-cursor:pointer;
-transition:0.4s ease;
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-
-.album:hover{
-transform:translateY(-5px) scale(1.02);
-}
-
-.album img{
-position:absolute;
-width:100%;
-height:100%;
-object-fit:cover;
-top:0;
-left:0;
-z-index:-2;
-}
-
-.album::after{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(to top,rgba(0,0,0,0.9),transparent 60%);
-z-index:-1;
-}
-
-.album-content{
-position:absolute;
-bottom:20px;
-left:20px;
-}
-
-.album-title{
-font-size:1rem;
-margin-bottom:5px;
-}
-
-.album-meta{
-font-size:0.75rem;
-opacity:0.6;
-}
-
-.create-btn{
-display:block;
-margin:20px auto;
-padding:12px 30px;
-border:1px solid rgba(255,255,255,0.4);
-border-radius:30px;
-background:none;
-color:white;
-cursor:pointer;
-transition:0.3s;
-}
-.create-btn:hover{
-background:white;
-color:black;
-}
+/* BOTÓN CREAR */
+.create-btn{display:block;margin:20px auto;padding:10px 25px;border:1px solid rgba(255,255,255,0.4);border-radius:30px;background:none;color:white;cursor:pointer;transition:0.3s;}
+.create-btn:hover{background:white;color:black;}
 
 /* VISTA ÁLBUM */
-#photoView{
-display:none;
-animation:fadeIn 0.6s ease;
-}
-
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(20px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-.back-btn{
-display:inline-block;
-margin-bottom:25px;
-cursor:pointer;
-opacity:0.6;
-transition:0.3s;
-}
-.back-btn:hover{opacity:1;}
-
-.gallery{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:18px;
-margin-top:25px;
-}
-
-.photo{
-position:relative;
-border-radius:16px;
-overflow:hidden;
-}
-
-.photo img{
-width:100%;
-height:180px;
-object-fit:cover;
-transition:0.4s;
-}
-
-.photo img:hover{
-transform:scale(1.05);
-}
-
-textarea{
-width:100%;
-margin-top:20px;
-background:rgba(255,255,255,0.05);
-border:none;
-color:white;
-padding:15px;
-border-radius:15px;
-min-height:100px;
-font-family:'Playfair Display', serif;
-}
-
-/* LIGHTBOX */
-#lightbox{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.95);
-justify-content:center;
-align-items:center;
-z-index:2000;
-}
-
-#lightbox img{
-max-width:90%;
-max-height:90%;
-border-radius:20px;
-box-shadow:0 0 40px rgba(255,255,255,0.1);
-}
-
-footer{
-text-align:center;
-padding:50px 20px;
-font-size:0.75rem;
-opacity:0.4;
-margin-top:60px;
-}
-
-audio{display:none;}
+#photoView{display:none;}
+.back-btn{display:inline-block;margin-bottom:15px;cursor:pointer;}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-top:20px;}
+.photo{position:relative;border-radius:12px;overflow:hidden;}
+.photo img{width:100%;height:160px;object-fit:cover;}
+.delete-btn{position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);border:none;color:white;padding:4px 6px;border-radius:6px;cursor:pointer;}
+textarea{width:100%;margin-top:15px;background:rgba(255,255,255,0.05);border:none;color:white;padding:12px;border-radius:12px;min-height:80px;}
+#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:2000;}
+#lightbox img{max-width:90%;max-height:90%;border-radius:20px;}
+footer{text-align:center;padding:40px 20px;font-size:0.75rem;opacity:0.4;margin-top:50px;}
 </style>
 </head>
 <body>
@@ -221,225 +57,112 @@ audio{display:none;}
 </nav>
 
 <div class="container">
-
 <h1 id="pageTitle">Álbumes</h1>
 
 <div id="albumView">
 <div class="album-grid" id="albumGrid"></div>
-<button class="create-btn" onclick="createAlbum()">Crear Nuevo Viaje</button>
+<button class="create-btn" onclick="createAlbum()">Crear Nuevo Álbum</button>
 </div>
 
 <div id="photoView">
-<span class="back-btn" onclick="goBack()">← Volver</span>
+<span class="back-btn" onclick="goBack()">← Volver a Álbumes</span>
 <h2 id="albumName"></h2>
 
 <label class="create-btn">
-Añadir Fotos
+Subir Fotos
 <input type="file" id="photoInput" accept="image/*" multiple hidden>
 </label>
 
-<textarea id="albumNote" placeholder="Escribe lo que sentiste en este viaje..."></textarea>
+<textarea id="albumNote" placeholder="Escribe algo sobre este viaje..."></textarea>
 
 <div class="gallery" id="gallery"></div>
 </div>
-
 </div>
 
-<div id="lightbox">
-<img id="lightboxImg">
-</div>
+<div id="lightbox"><img id="lightboxImg"></div>
 
-<footer>
-Hecho con amor y recuerdos ✨
-</footer>
-
-<audio id="globalMusic" autoplay loop>
-<source src="musica.mp3" type="audio/mpeg">
-</audio>
+<footer>Hecho con amor y viajes ✨</footer>
 
 <script>
-let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {};
+let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
+"París 2026": {photos: [], note:""},
+"Japón Soñado": {photos: [], note:""},
+"Roma": {photos: [], note:""}
+};
 
-let currentAlbum=null;
+let currentAlbum = null;
+const albumGrid = document.getElementById("albumGrid");
+const gallery = document.getElementById("gallery");
+const albumView = document.getElementById("albumView");
+const photoView = document.getElementById("photoView");
+const pageTitle = document.getElementById("pageTitle");
+const noteField = document.getElementById("albumNote");
 
-const albumGrid=document.getElementById("albumGrid");
-const gallery=document.getElementById("gallery");
-const albumView=document.getElementById("albumView");
-const photoView=document.getElementById("photoView");
-const pageTitle=document.getElementById("pageTitle");
-const noteField=document.getElementById("albumNote");
-
-function saveAlbums(){
-localStorage.setItem("viajesAlbums",JSON.stringify(albums));
-}
+function saveAlbums(){localStorage.setItem("viajesAlbums", JSON.stringify(albums));}
 
 function renderAlbums(){
 albumGrid.innerHTML="";
 Object.keys(albums).forEach(name=>{
-const album=albums[name];
+const div = document.createElement("div"); div.className="album";
 
-const div=document.createElement("div");
-div.className="album";
-
-if(album.photos[0]){
-const img=document.createElement("img");
-img.src=album.photos[0];
-div.appendChild(img);
+if(albums[name].photos[0]){
+const img = document.createElement("img"); img.src = albums[name].photos[0]; div.appendChild(img);
 }
 
-const content=document.createElement("div");
-content.className="album-content";
+const title = document.createElement("div"); title.className="album-title"; title.textContent = name;
 
-const title=document.createElement("div");
-title.className="album-title";
-title.textContent=name;
+const actions = document.createElement("div"); actions.className="album-actions";
 
-const meta=document.createElement("div");
-meta.className="album-meta";
-meta.textContent=(album.photos.length)+" fotos";
+const edit = document.createElement("button"); edit.className="action-btn"; edit.textContent="Editar";
+edit.onclick = (e)=>{e.stopPropagation();
+let newName = prompt("Nuevo nombre:", name); if(!newName || albums[newName]) return;
+albums[newName] = albums[name]; delete albums[name]; saveAlbums(); renderAlbums();
+};
 
-content.appendChild(title);
-content.appendChild(meta);
-div.appendChild(content);
+const del = document.createElement("button"); del.className="action-btn"; del.textContent="Eliminar";
+del.onclick = (e)=>{e.stopPropagation(); if(confirm("¿Eliminar álbum?")){delete albums[name]; saveAlbums(); renderAlbums();}};
 
+actions.appendChild(edit); actions.appendChild(del); div.appendChild(actions); div.appendChild(title);
 div.onclick=()=>openAlbum(name);
 albumGrid.appendChild(div);
 });
 }
 
-function createAlbum(){
-let name=prompt("Nombre del viaje:");
-if(!name || albums[name]) return;
-albums[name]={photos:[],note:"",date:new Date().toLocaleDateString()};
-saveAlbums();
-renderAlbums();
-}
+function createAlbum(){let name=prompt("Nombre del nuevo viaje:"); if(!name || albums[name]) return; albums[name]={photos:[], note:""}; saveAlbums(); renderAlbums();}
 
-function openAlbum(name){
-currentAlbum=name;
-pageTitle.textContent=name;
-albumView.style.display="none";
-photoView.style.display="block";
-noteField.value=albums[name].note;
-renderPhotos();
-}
+function openAlbum(name){currentAlbum=name; pageTitle.textContent=name; albumView.style.display="none"; photoView.style.display="block"; noteField.value=albums[name].note; renderPhotos();}
 
-function goBack(){
-photoView.style.display="none";
-albumView.style.display="block";
-pageTitle.textContent="Álbumes";
-renderAlbums();
-}
+function goBack(){photoView.style.display="none"; albumView.style.display="block"; pageTitle.textContent="Álbumes"; renderAlbums();}
 
 function renderPhotos(){
 gallery.innerHTML="";
 albums[currentAlbum].photos.forEach((src,i)=>{
-const div=document.createElement("div");
-div.className="photo";
-
-const img=document.createElement("img");
-img.src=src;
-img.onclick=()=>{
-document.getElementById("lightbox").style.display="flex";
-document.getElementById("lightboxImg").src=src;
-};
-
-div.appendChild(img);
-gallery.appendChild(div);
+const div=document.createElement("div"); div.className="photo";
+const img=document.createElement("img"); img.src=src;
+img.onclick=()=>{document.getElementById("lightbox").style.display="flex"; document.getElementById("lightboxImg").src=src;};
+const btn=document.createElement("button"); btn.className="delete-btn"; btn.textContent="✕"; btn.onclick=()=>{albums[currentAlbum].photos.splice(i,1); saveAlbums(); renderPhotos();};
+div.appendChild(img); div.appendChild(btn); gallery.appendChild(div);
 });
 }
 
-document.getElementById("photoInput").addEventListener("change",function(e){
+document.getElementById("photoInput").addEventListener("change", function(e){
 [...e.target.files].forEach(file=>{
-const reader=new FileReader();
-reader.onload=(ev)=>{
-albums[currentAlbum].photos.push(ev.target.result);
-saveAlbums();
-renderPhotos();
-};
+const reader = new FileReader();
+reader.onload=(ev)=>{albums[currentAlbum].photos.push(ev.target.result); saveAlbums(); renderPhotos();};
 reader.readAsDataURL(file);
 });
 this.value="";
 });
 
-noteField.addEventListener("input",()=>{
-albums[currentAlbum].note=noteField.value;
-saveAlbums();
-});
+noteField.addEventListener("input", ()=>{albums[currentAlbum].note=noteField.value; saveAlbums();});
 
-document.getElementById("lightbox").onclick=function(){
-this.style.display="none";
-};
-
-document.addEventListener("keydown",(e)=>{
-if(e.key==="Escape"){
-document.getElementById("lightbox").style.display="none";
-}
-});
+document.getElementById("lightbox").onclick=()=>{this.style.display="none";};
 
 renderAlbums();
 
-<audio id="globalMusic" loop playsinline>
-    <source src="musica.mp3" type="audio/mpeg">
-</audio>
-
-/* ===== MÚSICA GLOBAL COMPATIBLE MÓVIL ===== */
-
-const music = document.getElementById("globalMusic");
-
-/* Restaurar tiempo guardado */
-window.addEventListener("load", () => {
-
-    const savedTime = localStorage.getItem("musicTime");
-    if (savedTime) {
-        music.currentTime = parseFloat(savedTime);
-    }
-
-    attemptAutoplay();
-});
-
-/* Intentar autoplay */
-function attemptAutoplay(){
-    const playPromise = music.play();
-
-    if (playPromise !== undefined) {
-        playPromise
-        .then(() => {
-            // Autoplay funcionó
-        })
-        .catch(() => {
-            // Si el navegador bloquea, esperar primer toque
-            enableOnFirstTouch();
-        });
-    }
-}
-
-/* Activar en primer toque (invisible) */
-function enableOnFirstTouch(){
-    const startMusic = () => {
-        music.play().catch(()=>{});
-        document.removeEventListener("touchstart", startMusic);
-        document.removeEventListener("click", startMusic);
-    };
-
-    document.addEventListener("touchstart", startMusic, { once:true });
-    document.addEventListener("click", startMusic, { once:true });
-}
-
-/* Guardar tiempo constantemente */
-setInterval(() => {
-    if (!music.paused) {
-        localStorage.setItem("musicTime", music.currentTime);
-    }
-}, 1000);
-
-/* Si vuelve a la pestaña, reintentar */
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && music.paused) {
-        music.play().catch(()=>{});
-    }
-});
-
+/* ===== Música ===== */
+const music = new Audio("musica.mp3"); music.loop=true;
+document.body.addEventListener("click", ()=>{if(music.paused) music.play();},{once:true});
 </script>
 
 </body>
