@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Constelaciones de Momentos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+    margin:0;
+    padding:0;
+    height:100%;
+    background: #0b0b10;
+    font-family: 'Playfair Display', serif;
+    color:white;
+    overflow-x:hidden;
+}
+
+nav {
+    position: fixed;
+    top:0;
+    width:100%;
+    padding:18px 25px;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(12px);
+    z-index:1000;
+}
+nav.scrolled { background: rgba(0,0,0,0.75); }
+.logo { font-size:0.9rem; letter-spacing:3px; opacity:0.85; }
+.menu a { text-decoration:none; color:white; margin-left:20px; font-size:0.85rem; opacity:0.7; transition:0.3s; }
+.menu a:hover { opacity:1; }
+
+/* ===== CONSTELACIONES ===== */
+.constellation-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: radial-gradient(ellipse at center, #0b0b10 0%, #05050b 100%);
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.star:hover {
+    transform: scale(1.5);
+    box-shadow: 0 0 20px rgba(255,255,255,0.9);
+}
+
+/* LINEAS ENTRE ESTRELLAS */
+.line {
+    position: absolute;
+    width: 2px;
+    background: rgba(255,255,255,0.2);
+    transform-origin: top left;
+}
+
+/* POPUP */
+.popup {
+    position: absolute;
+    background: rgba(255,255,255,0.05);
+    padding:15px;
+    border-radius:12px;
+    max-width:220px;
+    display:none;
+    font-size:0.9rem;
+    line-height:1.5;
+    pointer-events:none;
+    z-index:2000;
+}
+.popup img {
+    width:100%;
+    border-radius:8px;
+    margin-top:8px;
+}
+
+/* FOOTER */
+footer { padding:60px 20px; text-align:center; font-size:0.75rem; opacity:0.4; }
+
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+    <div class="logo">Constelaciones de Momentos</div>
+    <div class="menu">
+        <a href="index.html">Inicio</a>
+        <a href="viajes.html">Viajes</a>
+        <a href="pelicula.html">El Momento</a>
+        <a href="timeline.html">Timeline</a>
+    </div>
+</nav>
+
+<div class="constellation-container" id="constellation">
+    <!-- POPUP -->
+    <div class="popup" id="popup"></div>
+</div>
+
+<footer>
+    Hecho con calma. Hecho contigo.
+</footer>
+
+<script>
+// ===== DATOS DE ESTRELLAS =====
+const starsData = [
+    { x: 10, y: 20, title:"Viaje a París", text:"Primera aventura juntos en la ciudad del amor.", img:"paris.jpg", group:"viaje" },
+    { x: 40, y: 25, title:"Escapada a Cancún", text:"Sol, mar y risas interminables.", img:"cancun.jpg", group:"viaje" },
+    { x: 70, y: 10, title:"Primer concierto juntos", text:"Nos emocionamos hasta llorar.", img:"concierto.jpg", group:"aventura" },
+    { x: 30, y: 60, title:"Día de lluvia en casa", text:"Risas y chocolate caliente.", img:"lluvia.jpg", group:"momento" },
+    { x: 80, y: 50, title:"Paseo por los Alpes", text:"Vistas impresionantes y frío abrazable.", img:"alpes.jpg", group:"viaje" }
+];
+
+const container = document.getElementById('constellation');
+const popup = document.getElementById('popup');
+
+// Crear estrellas
+starsData.forEach((star,i)=>{
+    const el = document.createElement('div');
+    el.classList.add('star');
+    el.style.top = star.y + '%';
+    el.style.left = star.x + '%';
+    el.dataset.index = i;
+    container.appendChild(el);
+
+    el.addEventListener('mouseenter', e=>{
+        const s = starsData[e.target.dataset.index];
+        popup.style.display = 'block';
+        popup.innerHTML = `<strong>${s.title}</strong><p>${s.text}</p><img src="${s.img}" alt="${s.title}">`;
+    });
+
+    el.addEventListener('mousemove', e=>{
+        popup.style.top = (e.clientY + 15) + 'px';
+        popup.style.left = (e.clientX + 15) + 'px';
+    });
+
+    el.addEventListener('mouseleave', e=>{
+        popup.style.display = 'none';
+    });
+});
+
+// ===== NAVBAR OSCURA =====
+window.addEventListener('scroll', ()=>{
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+</script>
+
+</body>
+</html>
