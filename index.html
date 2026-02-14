@@ -23,6 +23,29 @@ color:white;
 overflow-x:hidden;
 }
 
+/* ===== INTRO CINEMÁTICA ===== */
+
+.intro{
+position:fixed;
+width:100%;
+height:100vh;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:3000;
+font-size:1.2rem;
+letter-spacing:4px;
+animation:fadeOutIntro 3s ease 2.5s forwards;
+}
+
+@keyframes fadeOutIntro{
+to{
+opacity:0;
+visibility:hidden;
+}
+}
+
 /* ===== NAVBAR ===== */
 
 nav{
@@ -55,7 +78,7 @@ opacity:0.6;
 transition:0.3s;
 }
 
-.menu a:active{
+.menu a:hover{
 opacity:1;
 }
 
@@ -85,13 +108,6 @@ opacity:1;
 transform:scale(1.08);
 }
 
-/* Parallax solo en desktop */
-@media (min-width: 768px){
-.slide{
-background-attachment:fixed;
-}
-}
-
 .overlay{
 position:absolute;
 width:100%;
@@ -103,7 +119,7 @@ background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.85));
 
 .hero-text{
 position:absolute;
-bottom:90px;
+bottom:110px;
 width:100%;
 text-align:center;
 font-size:1.1rem;
@@ -111,15 +127,29 @@ letter-spacing:4px;
 opacity:0;
 transform:translateY(20px);
 animation:heroFade 2.5s ease forwards;
-animation-delay:1s;
+animation-delay:3s;
 padding:0 20px;
 }
 
 @keyframes heroFade{
 to{
-opacity:0.85;
+opacity:0.9;
 transform:translateY(0);
 }
+}
+
+/* ===== CONTADOR ===== */
+
+.counter{
+position:absolute;
+bottom:70px;
+width:100%;
+text-align:center;
+font-size:0.8rem;
+letter-spacing:2px;
+opacity:0.7;
+animation:heroFade 2.5s ease forwards;
+animation-delay:3.5s;
 }
 
 /* ===== SECCIONES ===== */
@@ -161,6 +191,30 @@ margin:40px auto;
 opacity:0.3;
 }
 
+/* ===== BOTÓN SECRETO ===== */
+
+.secret{
+margin-top:40px;
+font-size:0.8rem;
+opacity:0.4;
+cursor:pointer;
+transition:0.3s;
+}
+
+.secret:hover{
+opacity:0.8;
+}
+
+.hidden-message{
+margin-top:20px;
+opacity:0;
+transition:1s ease;
+}
+
+.hidden-message.show{
+opacity:0.8;
+}
+
 /* ===== FOOTER ===== */
 
 footer{
@@ -170,13 +224,16 @@ font-size:0.75rem;
 opacity:0.4;
 }
 
-/* AUDIO */
 audio{display:none;}
 
 </style>
 </head>
 
 <body>
+
+<div class="intro">
+Esta es nuestra historia…
+</div>
 
 <nav>
 <div class="logo">NUESTRA HISTORIA</div>
@@ -190,32 +247,23 @@ audio{display:none;}
 
 <div class="slide active" style="background-image:url('viaje1.jpg')"></div>
 <div class="slide" style="background-image:url('viaje2.jpg')"></div>
-<div class="slide" style="background-image:url('viaje4.jpg')"></div>
-<div class="slide" style="background-image:url('viaje5.jpg')"></div>
 <div class="slide" style="background-image:url('viaje3.jpg')"></div>
+<div class="slide" style="background-image:url('viaje4.jpg')"></div>
 <div class="slide" style="background-image:url('momento1.jpg')"></div>
-<div class="slide" style="background-image:url('momento2.jpg')"></div>
-<div class="slide" style="background-image:url('momento3.jpg')"></div>
 
 <div class="overlay"></div>
 
-<div class="hero-text">
-NUESTRA HISTORIA
+<div class="hero-text" id="heroPhrase">
 </div>
+
+<div class="counter" id="counter"></div>
 
 </div>
 
 <div class="section">
 <h2>Todo empezó sin planearlo</h2>
 <p>
-Y terminó siendo lo más bonito que me ha pasado. Desde aquel día
-en el que los dos empezamos a sentir por el otro, se juntaron dos
-deseos los cuales han sido capaces de evolucionar con unos sentimientos
-capaces de deslumbrar nuestra relación. El camino que nos queda, Victoria, 
-está construtyedose de manera la cual los dos seamos capaces de disfrutar 
-cada momentos juntos. Cada viaje, cada sonrisa, cada lágrima, momentos para recordar
-que quedarán guardados para siempre, y seguramente, algún dia, nos sentemos abrazados en
-nuestro sofá y podamos ver todos estos recopilados en un mismo lugar.
+Y terminó siendo lo más bonito que me ha pasado...
 </p>
 <div class="divider"></div>
 </div>
@@ -224,26 +272,17 @@ nuestro sofá y podamos ver todos estos recopilados en un mismo lugar.
 <h2>Momentos</h2>
 <p>
 Risas. Viajes. Silencios que dicen más que mil palabras.
-Es por eso por lo que este "rinconcito" ha sido creado, para que cuando
-queramos mirar nuestro camino juntos, lo podamos disfrutar en cada momento y
-en cada lugar en el que estemos. Lo iremos actualizando juntos, cada 14 de Febrero,
-donde subiremos todos los momentos los cuales queremos que sean recordados para siempre.
 </p>
 <div class="divider"></div>
+
+<div class="secret" onclick="showSecret()">
+Haz clic aquí si ahora mismo estás sonriendo
 </div>
-<div class="section">
-<h2>Lo que viene</h2>
-<p>
-No sé dónde será.  
-Pero sé que será contigo. Y cuando pienso en eso, todo lo demás deja de importarme, porque
-lo importante no es el lugar ni la situación, sino estar juntos en cada momento. Como cuando
-estamos cansados y nos tumbamos a dormir un rato, o cuando no nos decidimos donde ir a comer
-pero sabemos que elegiremos un lugar que nos encantará a los dos, Incluso las fotos en las que
-alguno sale mal terminan siendo especiales, porque no capturan una imagen perfecta, sino un momento
-real. Y creo que de eso se trata todo; no de que sea impecable, sino de que sea auténtico. De como lo 
-compartamos, de como lo vivamos tal y como venga, sabiendo que lo importante no es cómo se ve desde fuera, 
-sino cómo se siente por dentro.
-</p>
+
+<div class="hidden-message" id="hiddenMessage">
+Sabía que lo estarías. 🤍
+</div>
+
 </div>
 
 <footer>
@@ -256,23 +295,41 @@ Hecho con calma. Hecho contigo.
 
 <script>
 
-/* ===== SLIDER ===== */
+/* ===== FRASE DINÁMICA ===== */
+const frases = [
+"Todo empezó sin buscarlo.",
+"No sé dónde será, pero será contigo.",
+"Nuestro lugar favorito es donde estemos juntos.",
+"Lo mejor nunca se planea."
+];
 
+document.getElementById("heroPhrase").textContent =
+frases[Math.floor(Math.random()*frases.length)];
+
+/* ===== CONTADOR ===== */
+const startDate = new Date("2024-02-14");
+function updateCounter(){
+const now = new Date();
+const diff = now - startDate;
+const days = Math.floor(diff/(1000*60*60*24));
+document.getElementById("counter").textContent =
+days + " días construyendo nuestra historia";
+}
+setInterval(updateCounter,1000);
+updateCounter();
+
+/* ===== SLIDER ===== */
 const slides=document.querySelectorAll(".slide");
 let current=0;
-
 function nextSlide(){
 slides[current].classList.remove("active");
 current=(current+1)%slides.length;
 slides[current].classList.add("active");
 }
-
 setInterval(nextSlide,6500);
 
 /* ===== SCROLL REVEAL ===== */
-
 const sections=document.querySelectorAll(".section");
-
 function reveal(){
 sections.forEach(sec=>{
 if(sec.getBoundingClientRect().top<window.innerHeight-60){
@@ -280,37 +337,49 @@ sec.classList.add("visible");
 }
 });
 }
-
 window.addEventListener("scroll",reveal);
 reveal();
 
-/* ===== NAVBAR OSCURA AL SCROLL ===== */
-
+/* ===== NAVBAR OSCURA ===== */
 window.addEventListener("scroll",()=>{
-if(window.scrollY>20){
-document.querySelector("nav").style.background="rgba(0,0,0,0.75)";
-}else{
-document.querySelector("nav").style.background="rgba(0,0,0,0.45)";
-}
+document.querySelector("nav").style.background=
+window.scrollY>20
+? "rgba(0,0,0,0.75)"
+: "rgba(0,0,0,0.45)";
 });
 
+/* ===== BOTÓN SECRETO ===== */
+function showSecret(){
+document.getElementById("hiddenMessage").classList.add("show");
+}
+
+/* ===== MÚSICA PERSISTENTE ===== */
 const music = document.getElementById("music");
 
-/* Restaurar tiempo */
 window.addEventListener("load", () => {
 const savedTime = localStorage.getItem("musicTime");
+const wasPlaying = localStorage.getItem("musicPlaying");
+
 if(savedTime){
 music.currentTime = parseFloat(savedTime);
 }
+if(wasPlaying === "true"){
+music.play();
+}
 });
 
-/* Guardar tiempo constantemente */
 setInterval(() => {
 localStorage.setItem("musicTime", music.currentTime);
 }, 1000);
 
-/* Activar música en primer toque */
-document.body.addEventListener("touchstart", () => {
+music.addEventListener("play", ()=>{
+localStorage.setItem("musicPlaying","true");
+});
+music.addEventListener("pause", ()=>{
+localStorage.setItem("musicPlaying","false");
+});
+
+document.body.addEventListener("click", () => {
 music.play();
 }, {once:true});
 
