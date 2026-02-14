@@ -9,12 +9,94 @@
 <style>
 /* ===== RESET ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Playfair Display', serif;background:linear-gradient(180deg,#0b0b10,#141420);color:white;overflow-x:hidden;padding-top:100px;}
+body{
+font-family:'Playfair Display', serif;
+background:linear-gradient(180deg,#0b0b10,#141420);
+color:white;
+overflow-x:hidden;
+padding-top:100px;
+}
 h1{text-align:center;margin-bottom:40px;letter-spacing:4px;font-weight:400;}
-nav{position:fixed;top:0;width:100%;padding:18px 30px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(12px);z-index:1000;}
-nav .logo{font-size:1rem;letter-spacing:3px;}
-nav .menu a{text-decoration:none;color:white;margin-left:20px;font-size:0.85rem;opacity:0.7;transition:0.3s;}
-nav .menu a:hover{opacity:1;}
+
+/* ===== NAVBAR ===== */
+nav{
+position:fixed;
+top:0;
+width:100%;
+padding:18px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(12px);
+z-index:1000;
+}
+
+.logo{
+font-size:1rem;
+letter-spacing:3px;
+}
+
+/* MENU DESKTOP */
+.menu{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.menu a{
+text-decoration:none;
+color:white;
+font-size:0.85rem;
+opacity:0.7;
+transition:0.3s;
+}
+
+.menu a:hover{opacity:1;}
+
+/* HAMBURGER */
+.hamburger{
+display:none;
+flex-direction:column;
+cursor:pointer;
+gap:5px;
+}
+
+.hamburger span{
+width:22px;
+height:2px;
+background:white;
+transition:0.3s;
+}
+
+/* RESPONSIVE */
+@media (max-width:768px){
+
+.hamburger{display:flex;}
+
+.menu{
+position:absolute;
+top:70px;
+right:0;
+width:100%;
+flex-direction:column;
+background:rgba(0,0,0,0.95);
+backdrop-filter:blur(12px);
+padding:25px 0;
+gap:20px;
+text-align:center;
+transform:translateY(-120%);
+transition:0.4s ease;
+}
+
+.menu a{
+font-size:1rem;
+}
+
+.menu.active{
+transform:translateY(0);
+}
+}
 
 /* CONTENEDOR */
 .container{max-width:1200px;margin:auto;padding:0 20px;}
@@ -29,11 +111,9 @@ nav .menu a:hover{opacity:1;}
 .album-actions{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:2;}
 .action-btn{background:rgba(0,0,0,0.7);border:none;color:white;font-size:11px;padding:5px 8px;border-radius:8px;cursor:pointer;}
 
-/* BOTÓN CREAR */
 .create-btn{display:block;margin:20px auto;padding:10px 25px;border:1px solid rgba(255,255,255,0.4);border-radius:30px;background:none;color:white;cursor:pointer;transition:0.3s;}
 .create-btn:hover{background:white;color:black;}
 
-/* VISTA ÁLBUM */
 #photoView{display:none;}
 .back-btn{display:inline-block;margin-bottom:15px;cursor:pointer;}
 .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-top:20px;}
@@ -41,8 +121,19 @@ nav .menu a:hover{opacity:1;}
 .photo img{width:100%;height:160px;object-fit:cover;}
 .delete-btn{position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);border:none;color:white;padding:4px 6px;border-radius:6px;cursor:pointer;}
 textarea{width:100%;margin-top:15px;background:rgba(255,255,255,0.05);border:none;color:white;padding:12px;border-radius:12px;min-height:80px;}
-#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:2000;}
+
+#lightbox{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
+
 #lightbox img{max-width:90%;max-height:90%;border-radius:20px;}
+
 footer{text-align:center;padding:40px 20px;font-size:0.75rem;opacity:0.4;margin-top:50px;}
 </style>
 </head>
@@ -50,11 +141,17 @@ footer{text-align:center;padding:40px 20px;font-size:0.75rem;opacity:0.4;margin-
 
 <nav>
 <div class="logo">NUESTROS VIAJES</div>
-<div class="menu">
+
+<div class="hamburger" id="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<div class="menu" id="menu">
 <a href="index.html">Inicio</a>
 <a href="viajes.html">Nuestros Viajes</a>
-<a href="pelicula.html">EL Momento</a>
-
+<a href="pelicula.html">El Momento</a>
 </div>
 </nav>
 
@@ -86,6 +183,22 @@ Subir Fotos
 <footer>Hecho con amor y viajes ✨</footer>
 
 <script>
+
+/* ===== MENU MOVIL ===== */
+const hamburger=document.getElementById("hamburger");
+const menu=document.getElementById("menu");
+
+hamburger.addEventListener("click",()=>{
+menu.classList.toggle("active");
+});
+
+document.querySelectorAll(".menu a").forEach(link=>{
+link.addEventListener("click",()=>{
+menu.classList.remove("active");
+});
+});
+
+/* ===== ÁLBUMES ===== */
 let albums = JSON.parse(localStorage.getItem("viajesAlbums")) || {
 "París 2026": {photos: [], note:""},
 "Japón Soñado": {photos: [], note:""},
@@ -105,66 +218,132 @@ function saveAlbums(){localStorage.setItem("viajesAlbums", JSON.stringify(albums
 function renderAlbums(){
 albumGrid.innerHTML="";
 Object.keys(albums).forEach(name=>{
-const div = document.createElement("div"); div.className="album";
+const div=document.createElement("div");div.className="album";
 
 if(albums[name].photos[0]){
-const img = document.createElement("img"); img.src = albums[name].photos[0]; div.appendChild(img);
+const img=document.createElement("img");img.src=albums[name].photos[0];div.appendChild(img);
 }
 
-const title = document.createElement("div"); title.className="album-title"; title.textContent = name;
+const title=document.createElement("div");title.className="album-title";title.textContent=name;
+const actions=document.createElement("div");actions.className="album-actions";
 
-const actions = document.createElement("div"); actions.className="album-actions";
-
-const edit = document.createElement("button"); edit.className="action-btn"; edit.textContent="Editar";
-edit.onclick = (e)=>{e.stopPropagation();
-let newName = prompt("Nuevo nombre:", name); if(!newName || albums[newName]) return;
-albums[newName] = albums[name]; delete albums[name]; saveAlbums(); renderAlbums();
+const edit=document.createElement("button");
+edit.className="action-btn";
+edit.textContent="Editar";
+edit.onclick=(e)=>{
+e.stopPropagation();
+let newName=prompt("Nuevo nombre:",name);
+if(!newName||albums[newName])return;
+albums[newName]=albums[name];
+delete albums[name];
+saveAlbums();
+renderAlbums();
 };
 
-const del = document.createElement("button"); del.className="action-btn"; del.textContent="Eliminar";
-del.onclick = (e)=>{e.stopPropagation(); if(confirm("¿Eliminar álbum?")){delete albums[name]; saveAlbums(); renderAlbums();}};
+const del=document.createElement("button");
+del.className="action-btn";
+del.textContent="Eliminar";
+del.onclick=(e)=>{
+e.stopPropagation();
+if(confirm("¿Eliminar álbum?")){
+delete albums[name];
+saveAlbums();
+renderAlbums();
+}
+};
 
-actions.appendChild(edit); actions.appendChild(del); div.appendChild(actions); div.appendChild(title);
+actions.appendChild(edit);
+actions.appendChild(del);
+div.appendChild(actions);
+div.appendChild(title);
 div.onclick=()=>openAlbum(name);
 albumGrid.appendChild(div);
 });
 }
 
-function createAlbum(){let name=prompt("Nombre del nuevo viaje:"); if(!name || albums[name]) return; albums[name]={photos:[], note:""}; saveAlbums(); renderAlbums();}
+function createAlbum(){
+let name=prompt("Nombre del nuevo viaje:");
+if(!name||albums[name])return;
+albums[name]={photos:[],note:""};
+saveAlbums();
+renderAlbums();
+}
 
-function openAlbum(name){currentAlbum=name; pageTitle.textContent=name; albumView.style.display="none"; photoView.style.display="block"; noteField.value=albums[name].note; renderPhotos();}
+function openAlbum(name){
+currentAlbum=name;
+pageTitle.textContent=name;
+albumView.style.display="none";
+photoView.style.display="block";
+noteField.value=albums[name].note;
+renderPhotos();
+}
 
-function goBack(){photoView.style.display="none"; albumView.style.display="block"; pageTitle.textContent="Álbumes"; renderAlbums();}
+function goBack(){
+photoView.style.display="none";
+albumView.style.display="block";
+pageTitle.textContent="Álbumes";
+renderAlbums();
+}
 
 function renderPhotos(){
 gallery.innerHTML="";
 albums[currentAlbum].photos.forEach((src,i)=>{
-const div=document.createElement("div"); div.className="photo";
-const img=document.createElement("img"); img.src=src;
-img.onclick=()=>{document.getElementById("lightbox").style.display="flex"; document.getElementById("lightboxImg").src=src;};
-const btn=document.createElement("button"); btn.className="delete-btn"; btn.textContent="✕"; btn.onclick=()=>{albums[currentAlbum].photos.splice(i,1); saveAlbums(); renderPhotos();};
-div.appendChild(img); div.appendChild(btn); gallery.appendChild(div);
+const div=document.createElement("div");
+div.className="photo";
+
+const img=document.createElement("img");
+img.src=src;
+img.onclick=()=>{
+document.getElementById("lightbox").style.display="flex";
+document.getElementById("lightboxImg").src=src;
+};
+
+const btn=document.createElement("button");
+btn.className="delete-btn";
+btn.textContent="✕";
+btn.onclick=()=>{
+albums[currentAlbum].photos.splice(i,1);
+saveAlbums();
+renderPhotos();
+};
+
+div.appendChild(img);
+div.appendChild(btn);
+gallery.appendChild(div);
 });
 }
 
-document.getElementById("photoInput").addEventListener("change", function(e){
+document.getElementById("photoInput").addEventListener("change",function(e){
 [...e.target.files].forEach(file=>{
-const reader = new FileReader();
-reader.onload=(ev)=>{albums[currentAlbum].photos.push(ev.target.result); saveAlbums(); renderPhotos();};
+const reader=new FileReader();
+reader.onload=(ev)=>{
+albums[currentAlbum].photos.push(ev.target.result);
+saveAlbums();
+renderPhotos();
+};
 reader.readAsDataURL(file);
 });
 this.value="";
 });
 
-noteField.addEventListener("input", ()=>{albums[currentAlbum].note=noteField.value; saveAlbums();});
+noteField.addEventListener("input",()=>{
+albums[currentAlbum].note=noteField.value;
+saveAlbums();
+});
 
-document.getElementById("lightbox").onclick=()=>{this.style.display="none";};
+document.getElementById("lightbox").onclick=function(){
+this.style.display="none";
+};
 
 renderAlbums();
 
 /* ===== Música ===== */
-const music = new Audio("musica.mp3"); music.loop=true;
-document.body.addEventListener("click", ()=>{if(music.paused) music.play();},{once:true});
+const music=new Audio("musica.mp3");
+music.loop=true;
+document.body.addEventListener("click",()=>{
+if(music.paused) music.play();
+},{once:true});
+
 </script>
 
 </body>
