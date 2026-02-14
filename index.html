@@ -21,6 +21,7 @@ background:#0b0b10;
 font-family:'Playfair Display', serif;
 color:white;
 overflow-x:hidden;
+scroll-behavior:smooth;
 }
 
 /* ===== INTRO CINEMÁTICA ===== */
@@ -119,7 +120,7 @@ background:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.85));
 
 .hero-text{
 position:absolute;
-bottom:110px;
+bottom:130px;
 width:100%;
 text-align:center;
 font-size:1.1rem;
@@ -142,7 +143,7 @@ transform:translateY(0);
 
 .counter{
 position:absolute;
-bottom:70px;
+bottom:90px;
 width:100%;
 text-align:center;
 font-size:0.8rem;
@@ -155,7 +156,7 @@ animation-delay:3.5s;
 /* ===== SECCIONES ===== */
 
 .section{
-padding:80px 22px;
+padding:90px 22px;
 max-width:520px;
 margin:auto;
 text-align:center;
@@ -191,30 +192,6 @@ margin:40px auto;
 opacity:0.3;
 }
 
-/* ===== BOTÓN SECRETO ===== */
-
-.secret{
-margin-top:40px;
-font-size:0.8rem;
-opacity:0.4;
-cursor:pointer;
-transition:0.3s;
-}
-
-.secret:hover{
-opacity:0.8;
-}
-
-.hidden-message{
-margin-top:20px;
-opacity:0;
-transition:1s ease;
-}
-
-.hidden-message.show{
-opacity:0.8;
-}
-
 /* ===== FOOTER ===== */
 
 footer{
@@ -247,15 +224,16 @@ Esta es nuestra historia…
 
 <div class="slide active" style="background-image:url('viaje1.jpg')"></div>
 <div class="slide" style="background-image:url('viaje2.jpg')"></div>
-<div class="slide" style="background-image:url('viaje3.jpg')"></div>
 <div class="slide" style="background-image:url('viaje4.jpg')"></div>
+<div class="slide" style="background-image:url('viaje5.jpg')"></div>
+<div class="slide" style="background-image:url('viaje3.jpg')"></div>
 <div class="slide" style="background-image:url('momento1.jpg')"></div>
+<div class="slide" style="background-image:url('momento2.jpg')"></div>
+<div class="slide" style="background-image:url('momento3.jpg')"></div>
 
 <div class="overlay"></div>
 
-<div class="hero-text" id="heroPhrase">
-</div>
-
+<div class="hero-text" id="heroPhrase"></div>
 <div class="counter" id="counter"></div>
 
 </div>
@@ -263,7 +241,7 @@ Esta es nuestra historia…
 <div class="section">
 <h2>Todo empezó sin planearlo</h2>
 <p>
-Y terminó siendo lo más bonito que me ha pasado...
+Y terminó siendo lo más bonito que me ha pasado. Desde aquel día en el que los dos empezamos a sentir por el otro, se juntaron dos deseos que han sido capaces de evolucionar en unos sentimientos capaces de deslumbrar nuestra relación. El camino que nos queda, Victoria, está construyéndose de manera que los dos seamos capaces de disfrutar cada momento juntos. Cada viaje, cada sonrisa, cada lágrima… momentos para recordar que quedarán guardados para siempre. Y seguramente, algún día, nos sentemos abrazados en nuestro sofá y podamos ver todo esto recopilado en un mismo lugar.
 </p>
 <div class="divider"></div>
 </div>
@@ -271,25 +249,25 @@ Y terminó siendo lo más bonito que me ha pasado...
 <div class="section">
 <h2>Momentos</h2>
 <p>
-Risas. Viajes. Silencios que dicen más que mil palabras.
+Risas. Viajes. Silencios que dicen más que mil palabras.  
+Es por eso por lo que este “rinconcito” ha sido creado, para que cuando queramos mirar nuestro camino juntos, lo podamos disfrutar en cada momento y en cada lugar en el que estemos. Lo iremos actualizando juntos, cada 14 de febrero, donde subiremos todos los momentos que queremos que sean recordados para siempre.
 </p>
 <div class="divider"></div>
-
-<div class="secret" onclick="showSecret()">
-Haz clic aquí si ahora mismo estás sonriendo
 </div>
 
-<div class="hidden-message" id="hiddenMessage">
-Sabía que lo estarías. 🤍
-</div>
-
+<div class="section">
+<h2>Lo que viene</h2>
+<p>
+No sé dónde será.  
+Pero sé que será contigo. Y cuando pienso en eso, todo lo demás deja de importarme, porque lo importante no es el lugar ni la situación, sino estar juntos en cada momento. Como cuando estamos cansados y nos tumbamos a dormir un rato, o cuando no nos decidimos dónde ir a comer pero sabemos que elegiremos un lugar que nos encantará a los dos. Incluso las fotos en las que alguno sale mal terminan siendo especiales, porque no capturan una imagen perfecta, sino un momento real. Y creo que de eso se trata todo: no de que sea impecable, sino de que sea auténtico. De cómo lo compartamos, de cómo lo vivamos tal y como venga, sabiendo que lo importante no es cómo se ve desde fuera, sino cómo se siente por dentro.
+</p>
 </div>
 
 <footer>
 Hecho con calma. Hecho contigo.
 </footer>
 
-<audio id="music" loop>
+<audio id="globalMusic" autoplay loop>
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
@@ -297,17 +275,17 @@ Hecho con calma. Hecho contigo.
 
 /* ===== FRASE DINÁMICA ===== */
 const frases = [
-"Todo empezó sin buscarlo.",
+"Nuestra historia sigue escribiéndose.",
 "No sé dónde será, pero será contigo.",
-"Nuestro lugar favorito es donde estemos juntos.",
-"Lo mejor nunca se planea."
+"Lo mejor nunca se planea.",
+"Nuestro lugar favorito es donde estemos juntos."
 ];
 
 document.getElementById("heroPhrase").textContent =
 frases[Math.floor(Math.random()*frases.length)];
 
 /* ===== CONTADOR ===== */
-const startDate = new Date("2024-02-14");
+const startDate = new Date("2024-02-14"); // CAMBIA ESTA FECHA
 function updateCounter(){
 const now = new Date();
 const diff = now - startDate;
@@ -348,40 +326,25 @@ window.scrollY>20
 : "rgba(0,0,0,0.45)";
 });
 
-/* ===== BOTÓN SECRETO ===== */
-function showSecret(){
-document.getElementById("hiddenMessage").classList.add("show");
-}
-
 /* ===== MÚSICA PERSISTENTE ===== */
-const music = document.getElementById("music");
+const music = document.getElementById("globalMusic");
 
 window.addEventListener("load", () => {
-const savedTime = localStorage.getItem("musicTime");
-const wasPlaying = localStorage.getItem("musicPlaying");
 
-if(savedTime){
+const savedTime = localStorage.getItem("musicTime");
+if (savedTime) {
 music.currentTime = parseFloat(savedTime);
 }
-if(wasPlaying === "true"){
-music.play();
-}
+
+music.play().catch(()=>{});
+
 });
 
 setInterval(() => {
+if (!music.paused) {
 localStorage.setItem("musicTime", music.currentTime);
+}
 }, 1000);
-
-music.addEventListener("play", ()=>{
-localStorage.setItem("musicPlaying","true");
-});
-music.addEventListener("pause", ()=>{
-localStorage.setItem("musicPlaying","false");
-});
-
-document.body.addEventListener("click", () => {
-music.play();
-}, {once:true});
 
 </script>
 
