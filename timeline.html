@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Línea Temporal de Viajes</title>
+<title>Línea Temporal de Viajes Mejorada</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 /* ===== RESET ===== */
 * { margin:0; padding:0; box-sizing:border-box; }
-
 html, body {
-    background: #0b0b10;
+    background: linear-gradient(180deg,#0b0b10,#141420);
     font-family: 'Playfair Display', serif;
     color: white;
     overflow-x: hidden;
@@ -23,125 +22,130 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 18px 20px;
+    padding: 18px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0,0,0,0.45);
     backdrop-filter: blur(14px);
     z-index: 1000;
     transition: 0.4s ease;
 }
-
-.logo { font-size: 0.75rem; letter-spacing: 3px; opacity: 0.85; }
-
-.menu a {
-    text-decoration: none;
-    color: white;
-    margin-left: 15px;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    opacity: 0.6;
-    transition: 0.3s;
-}
-
-.menu a:hover { opacity: 1; }
+nav.scrolled { background: rgba(0,0,0,0.75); }
+.logo { font-size: 0.9rem; letter-spacing:3px; opacity:0.85; }
+.menu a { text-decoration:none; color:white; margin-left:20px; font-size:0.85rem; opacity:0.7; transition:0.3s; }
+.menu a:hover { opacity:1; }
 
 /* ===== TIMELINE ===== */
 .timeline {
     position: relative;
-    max-width: 900px;
-    margin: 120px auto 60px;
+    max-width: 1000px;
+    margin: 140px auto 80px;
     padding: 0 20px;
 }
-
 .timeline::before {
-    content: '';
+    content:'';
     position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    background: rgba(255,255,255,0.2);
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:4px;
+    height:100%;
+    background: rgba(255,255,255,0.15);
 }
 
 .timeline-item {
     position: relative;
-    width: 50%;
-    padding: 20px 30px;
-    box-sizing: border-box;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: 1s ease;
+    width:50%;
+    padding:20px 30px;
+    box-sizing:border-box;
+    opacity:0;
+    transform: translateY(50px);
+    transition: 1s ease, transform 1s ease;
 }
-
-.timeline-item.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.timeline-item.left { left: 0; text-align: right; }
-.timeline-item.right { left: 50%; text-align: left; }
+.timeline-item.visible { opacity:1; transform:translateY(0); }
+.timeline-item.left { left:0; text-align:right; }
+.timeline-item.right { left:50%; text-align:left; }
 
 .timeline-item::after {
-    content: '';
-    position: absolute;
-    top: 30px;
-    width: 15px;
-    height: 15px;
-    background: white;
-    border-radius: 50%;
-    z-index: 2;
+    content:'';
+    position:absolute;
+    top:30px;
+    width:18px;
+    height:18px;
+    background:white;
+    border-radius:50%;
+    z-index:2;
+    box-shadow:0 0 15px rgba(255,255,255,0.3);
 }
-
-.timeline-item.left::after { right: -8px; }
-.timeline-item.right::after { left: -8px; }
+.timeline-item.left::after { right:-9px; }
+.timeline-item.right::after { left:-9px; }
 
 .timeline-content {
     background: rgba(255,255,255,0.05);
-    padding: 15px;
-    border-radius: 12px;
-    display: inline-block;
-    max-width: 95%;
+    padding:20px;
+    border-radius:15px;
+    display:inline-block;
+    max-width:95%;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.timeline-content:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+.timeline-content h3 { font-size:1.6rem; margin-bottom:10px; }
+.timeline-content p { font-size:1rem; line-height:1.6; opacity:0.8; }
+.timeline-content img { width:100%; border-radius:12px; margin-top:12px; transition: transform 0.5s; }
+.timeline-content img:hover { transform: scale(1.05); }
+
+/* ===== FILTROS ===== */
+.filters {
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin:0 0 40px;
+    gap:15px;
+}
+.filters button {
+    padding:8px 20px;
+    border:none;
+    border-radius:30px;
+    background: rgba(255,255,255,0.05);
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+.filters button.active, .filters button:hover { background:white; color:black; }
+
+/* ===== MINI FRASE ===== */
+.mini-phrase {
+    text-align:center;
+    font-size:0.9rem;
+    opacity:0.7;
+    margin-bottom:20px;
+    letter-spacing:1px;
 }
 
-.timeline-content h3 { font-size: 1.5rem; margin-bottom: 10px; }
-.timeline-content p { font-size: 1rem; line-height: 1.6; opacity: 0.8; }
-.timeline-content img { width: 100%; border-radius: 12px; margin-top: 10px; }
-
 /* ===== RESPONSIVE ===== */
-@media (max-width:768px){
-    .timeline-item {
-        width: 100%;
-        padding: 20px 20px;
-        text-align: left !important;
-    }
-
-    .timeline-item.left::after,
-    .timeline-item.right::after { left: -8px; right: auto; }
-
-    .timeline::before { left: 10px; }
+@media(max-width:768px){
+    .timeline-item { width:100%; text-align:left !important; padding:20px 15px; }
+    .timeline-item.left::after, .timeline-item.right::after { left:-9px; right:auto; }
+    .timeline::before { left:10px; }
 }
 
 /* ===== FOOTER ===== */
 footer {
-    padding: 70px 20px;
-    text-align: center;
-    font-size: 0.75rem;
-    opacity: 0.4;
-}
-
-/* ===== NAVBAR OSCURA ===== */
-body.scrolled nav {
-    background: rgba(0,0,0,0.75);
+    padding:70px 20px;
+    text-align:center;
+    font-size:0.75rem;
+    opacity:0.4;
 }
 </style>
 </head>
 
 <body>
 
-<nav>
+<nav id="navbar">
     <div class="logo">Línea Temporal de Viajes</div>
     <div class="menu">
         <a href="index.html">Inicio</a>
@@ -152,31 +156,59 @@ body.scrolled nav {
 </nav>
 
 <div class="timeline">
-    <div class="timeline-item left">
+
+    <div class="filters">
+        <button class="filter-btn active" data-type="all">Todos</button>
+        <button class="filter-btn" data-type="city">Ciudad</button>
+        <button class="filter-btn" data-type="beach">Playa</button>
+        <button class="filter-btn" data-type="mountain">Montaña</button>
+        <button class="filter-btn" data-type="flight">Avión</button>
+    </div>
+
+    <div class="mini-phrase" id="miniPhrase">Nuestros viajes más memorables...</div>
+
+    <div class="timeline-item left" data-type="city">
         <div class="timeline-content">
             <h3>Viaje a París</h3>
             <p>En abril de 2023, visitamos la hermosa ciudad de París. Disfrutamos de la Torre Eiffel y el arte en el Louvre.</p>
-            <img src="paris.jpg" alt="Viaje a París">
+            <img src="paris.jpg" alt="París">
         </div>
     </div>
     
-    <div class="timeline-item right">
+    <div class="timeline-item right" data-type="beach">
         <div class="timeline-content">
-            <h3>Escapada a la Playa</h3>
+            <h3>Escapada a Cancún</h3>
             <p>En junio de 2023, nos relajamos en la playa de Cancún. Momentos de sol, mar y diversión.</p>
-            <img src="cancun.jpg" alt="Escapada a la Playa">
+            <img src="cancun.jpg" alt="Cancún">
         </div>
     </div>
 
-    <div class="timeline-item left">
+    <div class="timeline-item left" data-type="city">
         <div class="timeline-content">
             <h3>Exploración de Japón</h3>
             <p>En noviembre de 2023, exploramos Tokio y Kyoto. La cultura y la comida fueron increíbles.</p>
-            <img src="japon.jpg" alt="Exploración de Japón">
+            <img src="japon.jpg" alt="Japón">
         </div>
     </div>
 
-    <!-- Más viajes aquí -->
+    <div class="timeline-item right" data-type="mountain">
+        <div class="timeline-content">
+            <h3>Aventura en los Alpes</h3>
+            <p>En enero de 2024, caminamos por los Alpes suizos y disfrutamos de vistas impresionantes.</p>
+            <img src="alpes.jpg" alt="Alpes">
+        </div>
+    </div>
+
+    <div class="timeline-item left" data-type="flight">
+        <div class="timeline-content">
+            <h3>Primer vuelo internacional juntos</h3>
+            <p>En marzo de 2024, tomamos nuestro primer vuelo juntos rumbo a nuevas aventuras.</p>
+            <img src="avion.jpg" alt="Vuelo">
+        </div>
+    </div>
+
+    <!-- Agrega más items aquí -->
+
 </div>
 
 <footer>
@@ -184,12 +216,14 @@ body.scrolled nav {
 </footer>
 
 <script>
-/* ===== SCROLL REVEAL TIMELINE ===== */
+/* ===== SCROLL REVEAL ===== */
 const items = document.querySelectorAll('.timeline-item');
-function revealTimeline() {
-    items.forEach(item => {
-        if(item.getBoundingClientRect().top < window.innerHeight - 60) {
+function revealTimeline(){
+    items.forEach(item=>{
+        if(item.getBoundingClientRect().top < window.innerHeight - 60){
             item.classList.add('visible');
+            const phrase = document.getElementById('miniPhrase');
+            phrase.textContent = item.querySelector('h3').textContent;
         }
     });
 }
@@ -197,12 +231,25 @@ window.addEventListener('scroll', revealTimeline);
 revealTimeline();
 
 /* ===== NAVBAR OSCURA ===== */
-window.addEventListener("scroll", () => {
-    if(window.scrollY > 20){
-        document.body.classList.add("scrolled");
-    } else {
-        document.body.classList.remove("scrolled");
-    }
+window.addEventListener('scroll', ()=>{
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+/* ===== FILTROS ===== */
+const filterButtons = document.querySelectorAll('.filter-btn');
+filterButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        filterButtons.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const type = btn.dataset.type;
+        items.forEach(item=>{
+            if(type === 'all' || item.dataset.type === type){
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 });
 </script>
 
